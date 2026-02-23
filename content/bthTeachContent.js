@@ -1,43 +1,73 @@
 /**
  * Teaching content for B.Th: 12 slides per lesson.
- * Lesson ID format: bth-s{1-6}-m{1-N}-l{1-12}. Placeholder steps for all; replace with real content.
+ * Uses real CSB (Christian Standard Bible) text from csbPassages for every slide.
  */
+
+import { CSB_INTRO, CSB_PASSAGES, CSB_PASSAGE_KEYS, getCsbPassage } from "./csbPassages.js";
 
 const SLIDES_PER_LESSON = 12;
 
-function placeholderSteps(id, count = SLIDES_PER_LESSON) {
+/** Parse lessonId (e.g. bth-s1-m1-l5) to get lesson index 0–11. */
+function getLessonIndex(lessonId) {
+  if (!lessonId || typeof lessonId !== "string") return 0;
+  const m = lessonId.match(/^bth-s\d+-m\d+-l(\d+)$/);
+  if (!m) return 0;
+  const n = parseInt(m[1], 10);
+  return Math.max(0, Math.min(11, n - 1));
+}
+
+/** Build 12 steps from CSB passages for a given lesson. Each slide uses a real passage. */
+function buildCsbSteps(lessonId) {
+  const lessonIdx = getLessonIndex(lessonId);
   const steps = [];
-  for (let i = 0; i < count; i++) {
-    steps.push({
-      title: `Slide ${i + 1}`,
-      body: `Content for ${id}, slide ${i + 1}. Replace with course material that aids the reader.`,
-      highlight: i === count - 1 ? "Review the main points of this lesson." : null,
-    });
+  const numPassages = CSB_PASSAGE_KEYS.length;
+
+  for (let stepIndex = 0; stepIndex < SLIDES_PER_LESSON; stepIndex++) {
+    const keyIndex = (lessonIdx * SLIDES_PER_LESSON + stepIndex) % numPassages;
+    const key = CSB_PASSAGE_KEYS[keyIndex];
+    const passage = getCsbPassage(key);
+
+    if (passage) {
+      steps.push({
+        title: `${passage.ref} — ${passage.title}`,
+        body: passage.body,
+        highlight:
+          stepIndex === SLIDES_PER_LESSON - 1
+            ? `Review: "${passage.ref}" and the main points of this lesson.`
+            : null,
+      });
+    } else {
+      steps.push({
+        title: `Slide ${stepIndex + 1}`,
+        body: CSB_INTRO,
+        highlight: stepIndex === SLIDES_PER_LESSON - 1 ? "Review the main points of this lesson." : null,
+      });
+    }
   }
+
   return steps;
 }
 
 const DEFAULT_TERMS = [];
 
-/** Returns { steps: [...12 steps], terms: [] } for any B.Th lesson id. */
+/** Returns { steps: [...12 steps], terms: [] } for any B.Th lesson id. All slides use real CSB material. */
 export function getBthTeachContent(lessonId) {
   if (!lessonId || typeof lessonId !== "string") {
-    return { steps: placeholderSteps("unknown", SLIDES_PER_LESSON), terms: DEFAULT_TERMS };
+    return { steps: buildCsbSteps("bth-s1-m1-l1"), terms: DEFAULT_TERMS };
   }
-  // New syllabus format: bth-s1-m1-l1 ... bth-s6-m*-l12
   if (/^bth-s\d+-m\d+-l\d+$/.test(lessonId)) {
-    return { steps: placeholderSteps(lessonId, SLIDES_PER_LESSON), terms: DEFAULT_TERMS };
+    return { steps: buildCsbSteps(lessonId), terms: DEFAULT_TERMS };
   }
-  // Legacy ids (if any) — still support 12 steps by padding
   const legacy = BTH_TEACH_CONTENT_LEGACY[lessonId];
   if (legacy && Array.isArray(legacy.steps) && legacy.steps.length > 0) {
-    const steps = legacy.steps.length >= SLIDES_PER_LESSON
-      ? legacy.steps.slice(0, SLIDES_PER_LESSON)
-      : [...legacy.steps, ...placeholderSteps(lessonId, SLIDES_PER_LESSON - legacy.steps.length)];
+    const steps =
+      legacy.steps.length >= SLIDES_PER_LESSON
+        ? legacy.steps.slice(0, SLIDES_PER_LESSON)
+        : [...legacy.steps, ...buildCsbSteps(lessonId).slice(legacy.steps.length, SLIDES_PER_LESSON)];
     return { steps, terms: legacy.terms || DEFAULT_TERMS };
   }
-  return { steps: placeholderSteps(lessonId, SLIDES_PER_LESSON), terms: DEFAULT_TERMS };
+  return { steps: buildCsbSteps(lessonId), terms: DEFAULT_TERMS };
 }
 
-/** Legacy content (optional): keep for reference or specific overrides. */
+/** Legacy content (optional overrides). */
 const BTH_TEACH_CONTENT_LEGACY = {};
