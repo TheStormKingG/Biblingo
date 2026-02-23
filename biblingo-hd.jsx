@@ -1220,7 +1220,7 @@ function HomeScreen({course,switchCourse,modules,xp,streak,progress,completed,is
 }
 
 function ModuleScreen({mod,completed,isLessonUnlocked,MODULES,onBack,onLesson}){
-  const modIdx=MODULES.findIndex(m=>m.id===mod.id);const done=mod.lessons.filter(l=>completed.has(l.id)).length;const pct=Math.round((done/mod.lessons.length)*100);const Illus=ILLUSTRATIONS[mod.id];
+  const modIdx=MODULES.findIndex(m=>m.id===mod.id);const done=mod.lessons.filter(l=>completed.has(l.id)).length;const pct=Math.round((done/mod.lessons.length)*100);const Illus=ILLUSTRATIONS[mod.id]||ILLUSTRATIONS.m1;
   return(
     <div style={{maxWidth:680,margin:"0 auto",padding:"0 16px 60px"}}>
       <button onClick={onBack} style={{background:"none",border:"none",color:mod.palette.accent,cursor:"pointer",fontFamily:"'Fredoka One',cursive",fontSize:17,padding:"20px 0 0",display:"flex",alignItems:"center",gap:6}}>‹ All Modules</button>
