@@ -1,6 +1,11 @@
-# Biblingo — Genesis: Foundations of Faith
+# Biblingo — Genesis & Bachelor of Theology
 
-A React app for the Genesis course: 5 modules, 17 lessons (reading, verse study, reflection, quizzes, and drills). Progress is saved in `localStorage`.
+A React app with two courses:
+
+1. **Genesis: Foundations of Faith** — 5 modules, 17 lessons (reading, verse study, reflection, quizzes, and drills).
+2. **Bachelor of Theology (BTh)** — 3-year structure aligned with typical BTh curricula: 11 modules, 33 lessons (Year 1: OT/NT intro, Doctrine, Hermeneutics; Year 2: OT/NT set books, Church History, Systematic Theology; Year 3: Advanced Biblical Studies, Ethics, Mission). Use **Bachelor-of-Theology-Course-Content-2021-22.pdf** as the source of truth and align module titles/credits in `content/` (see below).
+
+Progress is saved in `localStorage`. Use the **Genesis** / **BTh** toggle on the home screen to switch courses.
 
 ## Run locally
 
@@ -22,7 +27,8 @@ Output is in `dist/`.
 
 ## Project layout
 
-- **`biblingo-hd.jsx`** — Main UI: all screens, scenes, illustrations, and course data (TEACH_CONTENT, QUESTIONS, LESSON_SCENES, MODULES). Accepts `initialCompleted`, `initialXp`, `initialStreak`, and `onProgressChange` for persistence.
+- **`biblingo-hd.jsx`** — Main UI: all screens, scenes, illustrations, and Genesis course data (TEACH_CONTENT, QUESTIONS, LESSON_SCENES, MODULES). Imports BTh structure and content from `content/`. Accepts `initialCompleted`, `initialXp`, `initialStreak`, and `onProgressChange` for persistence.
+- **`content/`** — Bachelor of Theology course structure and content. **`content/COURSE_SOURCE.md`** explains how to align with your PDF. Edit **`content/bachelorTheologyModules.js`** (titles, credits, lessons), **`content/bthTeachContent.js`** (teaching steps and terms), and **`content/bthQuestions.js`** (quiz questions) to match your syllabus.
 - **`src/App.jsx`** — Wrapper that loads/saves progress via `src/lib/storage.js` and renders `Biblingo` with initial state.
 - **`src/data/`** — Optional data layer with safe getters (`getTeachContent`, `getQuestions`) and fallback content for every lesson; used for consistency and future refactors.
 - **`src/main.jsx`** — Entry point. **`src/index.css`** — Global styles and utility classes.
