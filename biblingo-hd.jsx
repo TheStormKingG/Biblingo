@@ -1097,7 +1097,6 @@ export default function Biblingo({
   initialStreak,
   onProgressChange,
 } = {}) {
-  const [course, setCourse] = useState("genesis");
   const [screen, setScreen] = useState("home");
   const [activeMod, setActiveMod] = useState(null);
   const [activeLesson, setActiveLesson] = useState(null);
@@ -1114,14 +1113,13 @@ export default function Biblingo({
     }
   }, [completed, xp, streak, onProgressChange]);
 
-  const modules = course === "bth" ? BTH_MODULES : MODULES;
+  const modules = BTH_MODULES;
   const completedInCourse = modules.flatMap(m=>m.lessons).filter(l=>completed.has(l.id)).length;
   const totalLessons = modules.flatMap(m=>m.lessons).length;
   const courseProgress = totalLessons > 0 ? Math.round((completedInCourse/totalLessons)*100) : 0;
   const isModUnlocked = (idx)=>idx===0||modules[idx-1].lessons.every(l=>completed.has(l.id));
   const isLessonUnlocked = (modIdx,lessonIdx)=>{if(!isModUnlocked(modIdx))return false;if(lessonIdx===0)return true;return completed.has(modules[modIdx].lessons[lessonIdx-1].id);};
   const handleComplete=(lessonId,earnedXP)=>{setCompleted(prev=>new Set([...prev,lessonId]));setXp(prev=>prev+earnedXP);setScreen("module");};
-  const switchCourse=(next)=>{setCourse(next);setScreen("home");setActiveMod(null);setActiveLesson(null);};
 
   return (
     <div style={{fontFamily:"'Nunito','Segoe UI',sans-serif",minHeight:"100vh",background:"#f7f3ee",color:"#1c0f00"}}>
@@ -1159,16 +1157,14 @@ export default function Biblingo({
         .opt-w{border-color:#ef4444!important;background:#fef2f2!important;}
         .opt-s{border-color:#f59e0b;background:#fffbeb;}
       `}</style>
-      {screen==="home"&&<HomeScreen course={course} switchCourse={switchCourse} modules={modules} xp={xp} streak={streak} progress={courseProgress} completed={completed} isModUnlocked={isModUnlocked} onSelect={mod=>{setActiveMod(mod);setScreen("module");}}/>}
+      {screen==="home"&&<HomeScreen modules={modules} xp={xp} streak={streak} progress={courseProgress} completed={completed} isModUnlocked={isModUnlocked} onSelect={mod=>{setActiveMod(mod);setScreen("module");}}/>}
       {screen==="module"&&activeMod&&<ModuleScreen mod={activeMod} completed={completed} isLessonUnlocked={isLessonUnlocked} MODULES={modules} onBack={()=>setScreen("home")} onLesson={lesson=>{setActiveLesson(lesson);setScreen("lesson");}}/>}
-      {screen==="lesson"&&activeLesson&&activeMod&&<LessonScreen course={course} lesson={activeLesson} mod={activeMod} onBack={()=>setScreen("module")} onComplete={(xp)=>handleComplete(activeLesson.id,xp)}/>}
+      {screen==="lesson"&&activeLesson&&activeMod&&<LessonScreen lesson={activeLesson} mod={activeMod} onBack={()=>setScreen("module")} onComplete={(xp)=>handleComplete(activeLesson.id,xp)}/>}
     </div>
   );
 }
 
-function HomeScreen({course,switchCourse,modules,xp,streak,progress,completed,isModUnlocked,onSelect}){
-  const courseName = course === "bth" ? "Bachelor of Theology" : "Genesis: Foundations of Faith";
-  const courseSub = course === "bth" ? "3 years · 11 modules · 33 lessons" : "5 modules · 17 lessons";
+function HomeScreen({modules,xp,streak,progress,completed,isModUnlocked,onSelect}){
   return(
     <div style={{maxWidth:680,margin:"0 auto",padding:"0 16px 60px"}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"22px 0 10px"}}>
@@ -1178,18 +1174,14 @@ function HomeScreen({course,switchCourse,modules,xp,streak,progress,completed,is
           <div className="star-twinkle" style={{display:"flex",alignItems:"center",gap:5,background:"#fffbeb",border:"2px solid #fde68a",padding:"6px 14px",borderRadius:20,boxShadow:"0 2px 10px rgba(251,191,36,0.25)"}}><span style={{fontSize:20}}>⭐</span><span style={{fontFamily:"'Fredoka One',cursive",fontSize:18,color:"#d97706"}}>{xp}</span></div>
         </div>
       </div>
-      <div style={{display:"flex",gap:10,marginBottom:14}}>
-        <button onClick={()=>switchCourse("genesis")} style={{flex:1,padding:"12px 16px",borderRadius:16,border:course==="genesis"?"3px solid #d97706":"2px solid #e5e0d8",background:course==="genesis"?"#fff7ed":"#fff",fontFamily:"'Fredoka One',cursive",fontSize:14,color:course==="genesis"?"#b45309":"#78716c",cursor:"pointer",boxShadow:course==="genesis"?"0 4px 12px rgba(217,119,6,0.25)":"none"}}>Genesis</button>
-        <button onClick={()=>switchCourse("bth")} style={{flex:1,padding:"12px 16px",borderRadius:16,border:course==="bth"?"3px solid #0d9488":"2px solid #e5e0d8",background:course==="bth"?"#f0fdfa":"#fff",fontFamily:"'Fredoka One',cursive",fontSize:14,color:course==="bth"?"#0f766e":"#78716c",cursor:"pointer",boxShadow:course==="bth"?"0 4px 12px rgba(13,148,136,0.25)":"none"}}>BTh</button>
-      </div>
-      <div className="pop" style={{marginTop:0,marginBottom:26,background:course==="bth"?"linear-gradient(135deg,#0d9488,#059669)":"linear-gradient(135deg,#f97316,#dc2626)",borderRadius:24,padding:"22px 24px 20px",boxShadow:course==="bth"?"0 8px 28px rgba(5,150,105,0.3),0 3px 0 rgba(4,120,87,0.5)":"0 8px 28px rgba(220,38,38,0.3),0 3px 0 rgba(153,27,27,0.5)",position:"relative",overflow:"hidden"}}>
+      <div className="pop" style={{marginTop:0,marginBottom:26,background:"linear-gradient(135deg,#0d9488,#059669)",borderRadius:24,padding:"22px 24px 20px",boxShadow:"0 8px 28px rgba(5,150,105,0.3),0 3px 0 rgba(4,120,87,0.5)",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",right:-24,top:-24,fontSize:110,opacity:0.1,transform:"rotate(12deg)"}}>✝</div>
         <div style={{fontSize:11,fontWeight:900,color:"rgba(255,255,255,0.7)",letterSpacing:"0.18em",marginBottom:4}}>ACTIVE COURSE</div>
-        <div style={{fontFamily:"'Fredoka One',cursive",fontSize:24,color:"#fff",marginBottom:2}}>{courseName}</div>
-        <div style={{fontSize:14,color:"rgba(255,255,255,0.8)",marginBottom:14}}>{courseSub} · {progress}% complete</div>
+        <div style={{fontFamily:"'Fredoka One',cursive",fontSize:24,color:"#fff",marginBottom:2}}>Bachelor of Theology</div>
+        <div style={{fontSize:14,color:"rgba(255,255,255,0.8)",marginBottom:14}}>3 years · 11 modules · 33 lessons · {progress}% complete</div>
         <div style={{background:"rgba(255,255,255,0.25)",borderRadius:10,height:12,overflow:"hidden"}}><div style={{height:"100%",width:`${progress}%`,background:"#fff",borderRadius:10,transition:"width 0.6s ease"}}/></div>
       </div>
-      <div style={{fontSize:12,fontWeight:900,color:"#a8845a",letterSpacing:"0.18em",marginBottom:16}}>{course==="bth"?"MODULES (BY YEAR)" : "SCRIPTURE MODULES"}</div>
+      <div style={{fontSize:12,fontWeight:900,color:"#a8845a",letterSpacing:"0.18em",marginBottom:16}}>MODULES (BY YEAR)</div>
       {modules.map((mod,idx)=>{
         const unlocked=isModUnlocked(idx);const done=mod.lessons.filter(l=>completed.has(l.id)).length;const pct=Math.round((done/mod.lessons.length)*100);const isComplete=done===mod.lessons.length;const Illus=ILLUSTRATIONS[mod.id]||ILLUSTRATIONS.m1;
         return(
@@ -1250,7 +1242,7 @@ function ModuleScreen({mod,completed,isLessonUnlocked,MODULES,onBack,onLesson}){
   );
 }
 
-function LessonScreen({course,lesson,mod,onBack,onComplete}){
+function LessonScreen({lesson,mod,onBack,onComplete}){
   const [phase,setPhase]=useState("teach");
   const [step,setStep]=useState(0);
   const [qIdx,setQIdx]=useState(0);
@@ -1261,12 +1253,11 @@ function LessonScreen({course,lesson,mod,onBack,onComplete}){
   const [hearts,setHearts]=useState(3);
   const [shake,setShake]=useState(false);
 
-  const isBth = course === "bth";
-  const tc = isBth ? getBthTeachContent(lesson.id) : (TEACH_CONTENT[lesson.id]||TEACH_CONTENT["l5-1"]);
-  const qs = isBth ? getBthQuestions(lesson.id) : (QUESTIONS[lesson.id]||[]);
+  const tc = getBthTeachContent(lesson.id);
+  const qs = getBthQuestions(lesson.id);
   const isQuizType=lesson.type==="quiz"||lesson.type==="drill";
   const q=qs[qIdx];
-  const scenes=isBth ? [SceneScrollRoom] : (LESSON_SCENES[lesson.id]||[SceneScrollRoom]);
+  const scenes=[SceneScrollRoom];
 
   const handleAnswer=(i)=>{if(answered)return;setSel(i);setAnswered(true);const correct=i===q.c;setIsCorrect(correct);if(correct)setScore(s=>s+1);else{setHearts(h=>Math.max(0,h-1));setShake(true);setTimeout(()=>setShake(false),500);}};
   const nextQ=()=>{if(qIdx+1>=qs.length){setPhase("done");}else{setQIdx(i=>i+1);setSel(null);setAnswered(false);setIsCorrect(false);}};
