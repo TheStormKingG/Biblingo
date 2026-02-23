@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { BTH_MODULES } from "./content/bachelorTheologyModules.js";
 import { getBthTeachContent } from "./content/bthTeachContent.js";
 import { getBthQuestions } from "./content/bthQuestions.js";
+import { getBthScenes } from "./content/bthScenes.jsx";
 
 // ─── PRE-COMPUTED STAR FIELDS ──────────────────────────────────────────────────
 const STARS_A = [[20,15,2.5],[50,8,1.5],[80,20,2],[110,10,1.5],[150,6,2],[180,18,1.5],[220,9,2.5],[255,20,1.5],[290,12,2],[300,25,1],[30,40,1],[70,35,1.5],[120,30,1],[200,35,2],[260,40,1.5],[15,55,1],[95,50,1.2],[170,48,0.9],[240,52,1.4],[310,48,1]];
@@ -1257,7 +1258,7 @@ function LessonScreen({lesson,mod,onBack,onComplete}){
   const qs = getBthQuestions(lesson.id);
   const isQuizType=lesson.type==="quiz"||lesson.type==="drill";
   const q=qs[qIdx];
-  const scenes=[SceneScrollRoom];
+  const scenes=getBthScenes(lesson.id);
 
   const handleAnswer=(i)=>{if(answered)return;setSel(i);setAnswered(true);const correct=i===q.c;setIsCorrect(correct);if(correct)setScore(s=>s+1);else{setHearts(h=>Math.max(0,h-1));setShake(true);setTimeout(()=>setShake(false),500);}};
   const nextQ=()=>{if(qIdx+1>=qs.length){setPhase("done");}else{setQIdx(i=>i+1);setSel(null);setAnswered(false);setIsCorrect(false);}};
