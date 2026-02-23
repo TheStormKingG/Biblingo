@@ -1166,6 +1166,7 @@ export default function Biblingo({
 }
 
 function HomeScreen({modules,xp,streak,progress,completed,isModUnlocked,onSelect}){
+  const totalLessons = modules.flatMap(m=>m.lessons).length;
   return(
     <div style={{maxWidth:680,margin:"0 auto",padding:"0 16px 60px"}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"22px 0 10px"}}>
