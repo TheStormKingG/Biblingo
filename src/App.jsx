@@ -15,7 +15,7 @@ export default function App() {
 
   if (initialState === null) {
     return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#faf7f2' }}>
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#f7f3ee' }}>
         <div style={{ fontFamily: "'Fredoka One', cursive", fontSize: 24, color: '#d97706' }}>Loading…</div>
       </div>
     );

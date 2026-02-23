@@ -1124,13 +1124,13 @@ export default function Biblingo({
   const switchCourse=(next)=>{setCourse(next);setScreen("home");setActiveMod(null);setActiveLesson(null);};
 
   return (
-    <div style={{fontFamily:"'Nunito','Segoe UI',sans-serif",minHeight:"100vh",background:"#faf7f2",color:"#1c0f00"}}>
+    <div style={{fontFamily:"'Nunito','Segoe UI',sans-serif",minHeight:"100vh",background:"#f7f3ee",color:"#1c0f00"}}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap');
         *{box-sizing:border-box;margin:0;padding:0;}
-        ::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-thumb{background:#d4a06a;border-radius:3px;}
+        ::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-thumb{background:#c4a574;border-radius:3px;}
         .card-hover{transition:transform 0.22s cubic-bezier(.34,1.56,.64,1),box-shadow 0.22s ease;cursor:pointer;}
-        .card-hover:hover{transform:translateY(-5px) scale(1.01);}
+        .card-hover:hover{transform:translateY(-5px) scale(1.01);box-shadow:0 12px 32px rgba(0,0,0,0.12);}
         .row-hover{transition:transform 0.15s ease,background 0.15s ease;cursor:pointer;}
         .row-hover:hover{transform:translateX(5px);}
         .pop{animation:pop 0.5s cubic-bezier(.34,1.56,.64,1) both;}
@@ -1139,6 +1139,12 @@ export default function Biblingo({
         @keyframes fadeAnim{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
         .float{animation:floatAnim 3.5s ease-in-out infinite;}
         @keyframes floatAnim{0%,100%{transform:translateY(0);}50%{transform:translateY(-9px);}}
+        .star-twinkle{animation:starTwinkle 2s ease-in-out infinite;}
+        @keyframes starTwinkle{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.85;transform:scale(1.08);}}
+        .glow-pulse{animation:glowPulse 2.2s ease-in-out infinite;}
+        @keyframes glowPulse{0%,100%{filter:drop-shadow(0 0 6px rgba(251,191,36,0.4));}50%{filter:drop-shadow(0 0 14px rgba(251,191,36,0.7));}}
+        .fire-pulse{animation:firePulse 1.8s ease-in-out infinite;}
+        @keyframes firePulse{0%,100%{filter:drop-shadow(0 0 4px rgba(234,88,12,0.5));}50%{filter:drop-shadow(0 0 12px rgba(234,88,12,0.8));}}
         .shake{animation:shakeAnim 0.4s ease;}
         @keyframes shakeAnim{0%,100%{transform:translateX(0);}25%{transform:translateX(-9px);}75%{transform:translateX(9px);}}
         .gold-btn{background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#431407;border:none;border-radius:16px;padding:15px 28px;font-family:'Fredoka One',cursive;font-size:18px;cursor:pointer;box-shadow:0 4px 0 #d97706,0 6px 20px rgba(245,158,11,0.35);transition:all 0.12s;letter-spacing:0.02em;width:100%;}
@@ -1168,8 +1174,8 @@ function HomeScreen({course,switchCourse,modules,xp,streak,progress,completed,is
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"22px 0 10px"}}>
         <div><div style={{fontFamily:"'Fredoka One',cursive",fontSize:34,color:"#d97706",lineHeight:1}}>Biblingo</div><div style={{fontSize:13,color:"#a8845a",fontWeight:700,marginTop:2}}>Walk in the Word, daily 📖</div></div>
         <div style={{display:"flex",gap:10}}>
-          <div style={{display:"flex",alignItems:"center",gap:5,background:"#fff7ed",border:"2px solid #fed7aa",padding:"6px 14px",borderRadius:20}}><span style={{fontSize:20}}>🔥</span><span style={{fontFamily:"'Fredoka One',cursive",fontSize:18,color:"#ea580c"}}>{streak}</span></div>
-          <div style={{display:"flex",alignItems:"center",gap:5,background:"#fffbeb",border:"2px solid #fde68a",padding:"6px 14px",borderRadius:20}}><span style={{fontSize:20}}>⭐</span><span style={{fontFamily:"'Fredoka One',cursive",fontSize:18,color:"#d97706"}}>{xp}</span></div>
+          <div className="fire-pulse" style={{display:"flex",alignItems:"center",gap:5,background:"#fff7ed",border:"2px solid #fed7aa",padding:"6px 14px",borderRadius:20,boxShadow:"0 2px 10px rgba(234,88,12,0.2)"}}><span style={{fontSize:20}}>🔥</span><span style={{fontFamily:"'Fredoka One',cursive",fontSize:18,color:"#ea580c"}}>{streak}</span></div>
+          <div className="star-twinkle" style={{display:"flex",alignItems:"center",gap:5,background:"#fffbeb",border:"2px solid #fde68a",padding:"6px 14px",borderRadius:20,boxShadow:"0 2px 10px rgba(251,191,36,0.25)"}}><span style={{fontSize:20}}>⭐</span><span style={{fontFamily:"'Fredoka One',cursive",fontSize:18,color:"#d97706"}}>{xp}</span></div>
         </div>
       </div>
       <div style={{display:"flex",gap:10,marginBottom:14}}>
@@ -1188,7 +1194,7 @@ function HomeScreen({course,switchCourse,modules,xp,streak,progress,completed,is
         const unlocked=isModUnlocked(idx);const done=mod.lessons.filter(l=>completed.has(l.id)).length;const pct=Math.round((done/mod.lessons.length)*100);const isComplete=done===mod.lessons.length;const Illus=ILLUSTRATIONS[mod.id]||ILLUSTRATIONS.m1;
         return(
           <div key={mod.id} className={unlocked?"card-hover":""} onClick={()=>unlocked&&onSelect(mod)} style={{marginBottom:22,borderRadius:24,overflow:"hidden",opacity:unlocked?1:0.5,boxShadow:unlocked?`0 6px 0 ${mod.palette.shadow.replace("0.2","0.5")},0 8px 28px ${mod.palette.shadow}`:"0 2px 8px rgba(0,0,0,0.08)",border:`2.5px solid ${unlocked?mod.palette.accent+"44":"#e5e0d8"}`,cursor:unlocked?"pointer":"not-allowed",animation:`pop ${0.3+idx*0.07}s cubic-bezier(.34,1.56,.64,1) both`,animationDelay:`${idx*0.06}s`}}>
-            <div style={{height:160,position:"relative",background:mod.palette.bg}}>
+            <div style={{height:180,position:"relative",background:mod.palette.bg}}>
               <Illus/>
               <div style={{position:"absolute",top:12,left:14,background:mod.palette.accent,color:"#fff",fontFamily:"'Fredoka One',cursive",fontSize:13,padding:"4px 12px",borderRadius:20,boxShadow:"0 2px 8px rgba(0,0,0,0.25)"}}>{mod.emoji} {mod.year ? `Year ${mod.year} · ` : ""}Module {mod.number}</div>
               <div style={{position:"absolute",top:12,right:14,background:"rgba(255,255,255,0.93)",color:mod.palette.accent,fontSize:11,fontWeight:900,letterSpacing:"0.12em",padding:"4px 11px",borderRadius:20,border:`2px solid ${mod.palette.accent}55`}}>{mod.tag}</div>
@@ -1219,7 +1225,7 @@ function ModuleScreen({mod,completed,isLessonUnlocked,MODULES,onBack,onLesson}){
     <div style={{maxWidth:680,margin:"0 auto",padding:"0 16px 60px"}}>
       <button onClick={onBack} style={{background:"none",border:"none",color:mod.palette.accent,cursor:"pointer",fontFamily:"'Fredoka One',cursive",fontSize:17,padding:"20px 0 0",display:"flex",alignItems:"center",gap:6}}>‹ All Modules</button>
       <div className="pop" style={{marginTop:16,marginBottom:24,borderRadius:24,overflow:"hidden",boxShadow:`0 6px 0 ${mod.palette.shadow.replace("0.2","0.4")},0 8px 28px ${mod.palette.shadow}`,border:`2.5px solid ${mod.palette.accent}44`}}>
-        <div style={{height:175,background:mod.palette.bg,position:"relative"}}><Illus/><div style={{position:"absolute",top:12,left:14,background:mod.palette.accent,color:"#fff",fontFamily:"'Fredoka One',cursive",fontSize:13,padding:"4px 12px",borderRadius:20}}>{mod.emoji} {mod.year ? `Year ${mod.year} · ` : ""}Module {mod.number} · {mod.tag}</div></div>
+        <div style={{height:200,background:mod.palette.bg,position:"relative"}}><Illus/><div style={{position:"absolute",top:12,left:14,background:mod.palette.accent,color:"#fff",fontFamily:"'Fredoka One',cursive",fontSize:13,padding:"4px 12px",borderRadius:20}}>{mod.emoji} {mod.year ? `Year ${mod.year} · ` : ""}Module {mod.number} · {mod.tag}</div></div>
         <div style={{background:mod.palette.card,padding:"18px 22px 20px"}}>
           <div style={{fontFamily:"'Fredoka One',cursive",fontSize:26,color:mod.palette.text,marginBottom:2}}>{mod.title}</div>
           <div style={{fontSize:14,color:mod.palette.accent,fontWeight:700,marginBottom:10,fontStyle:"italic"}}>{mod.subtitle}</div>
@@ -1232,10 +1238,10 @@ function ModuleScreen({mod,completed,isLessonUnlocked,MODULES,onBack,onLesson}){
       {mod.lessons.map((lesson,idx)=>{
         const unlocked=isLessonUnlocked(modIdx,idx);const isDone=completed.has(lesson.id);const isCurrent=unlocked&&!isDone;const meta=LESSON_META[lesson.type];
         return(
-          <div key={lesson.id} className={unlocked?"row-hover":""} onClick={()=>unlocked&&onLesson(lesson)} style={{marginBottom:10,padding:"14px 18px",borderRadius:18,display:"flex",alignItems:"center",gap:14,background:isDone?"#f0fdf4":isCurrent?"#fff":mod.palette.bg,border:`2.5px solid ${isDone?"#86efac":isCurrent?mod.palette.accent+"88":"#e5e0d8"}`,opacity:unlocked?1:0.45,cursor:unlocked?"pointer":"not-allowed",boxShadow:isCurrent?`0 4px 16px ${mod.palette.shadow}`:"0 2px 6px rgba(0,0,0,0.05)",animation:`pop ${0.2+idx*0.08}s cubic-bezier(.34,1.56,.64,1) both`,animationDelay:`${0.1+idx*0.07}s`}}>
-            <div style={{width:50,height:50,borderRadius:15,background:isDone?"#dcfce7":isCurrent?`${meta.color}18`:"#f5f0e8",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,minWidth:50,border:`2.5px solid ${isDone?"#86efac":isCurrent?meta.color+"55":"#e5e0d8"}`}}>{isDone?"✅":unlocked?meta.icon:"🔒"}</div>
-            <div style={{flex:1}}><div style={{fontWeight:800,fontSize:16,color:isDone?"#15803d":isCurrent?mod.palette.text:"#a8845a",marginBottom:4}}>{lesson.title}</div><div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"center"}}><span style={{fontSize:12,fontWeight:800,color:meta.color,background:`${meta.color}15`,padding:"2px 9px",borderRadius:8}}>{meta.icon} {meta.label}</span><span style={{fontSize:12,color:"#a8845a",fontWeight:600}}>⏱ {lesson.duration}</span><span style={{fontSize:12,fontWeight:800,color:"#d97706"}}>+{lesson.xp} XP</span></div></div>
-            {isCurrent&&<div style={{background:mod.palette.accent,color:"#fff",fontFamily:"'Fredoka One',cursive",fontSize:14,padding:"7px 16px",borderRadius:12,whiteSpace:"nowrap",boxShadow:`0 3px 0 ${mod.palette.shadow.replace("0.2","0.5")}`}}>Start →</div>}
+          <div key={lesson.id} className={unlocked?"row-hover":""} onClick={()=>unlocked&&onLesson(lesson)} style={{marginBottom:10,padding:"14px 18px",borderRadius:18,display:"flex",alignItems:"center",gap:14,background:isDone?"#f0fdf4":isCurrent?"#fff":mod.palette.bg,border:`2.5px solid ${isDone?"#86efac":isCurrent?mod.palette.accent+"88":"#e5e0d8"}`,opacity:unlocked?1:0.45,cursor:unlocked?"pointer":"not-allowed",boxShadow:isCurrent?`0 4px 20px ${mod.palette.shadow}, 0 0 0 1px ${mod.palette.accent}22`:"0 2px 6px rgba(0,0,0,0.05)",animation:`pop ${0.2+idx*0.08}s cubic-bezier(.34,1.56,.64,1) both`,animationDelay:`${0.1+idx*0.07}s`}}>
+            <div style={{width:54,height:54,borderRadius:"50%",background:isDone?"#dcfce7":isCurrent?`${meta.color}22`:"#f5f0e8",display:"flex",alignItems:"center",justifyContent:"center",fontSize:26,minWidth:54,flexShrink:0,border:`3px solid ${isDone?"#86efac":isCurrent?meta.color+"66":"#e5e0d8"}`,boxShadow:isCurrent?`0 4px 14px ${meta.color}44`:"0 2px 8px rgba(0,0,0,0.06)"}}>{isDone?"✅":unlocked?meta.icon:"🔒"}</div>
+            <div style={{flex:1}}><div style={{fontWeight:800,fontSize:16,color:isDone?"#15803d":isCurrent?mod.palette.text:"#a8845a",marginBottom:4}}>{lesson.title}</div><div style={{display:"flex",gap:8,flexWrap:"wrap",alignItems:"center"}}><span style={{fontSize:12,fontWeight:800,color:meta.color,background:`${meta.color}18`,padding:"2px 9px",borderRadius:8}}>{meta.icon} {meta.label}</span><span style={{fontSize:12,color:"#a8845a",fontWeight:600}}>⏱ {lesson.duration}</span><span style={{fontSize:12,fontWeight:800,color:"#d97706"}}>+{lesson.xp} XP</span></div></div>
+            {isCurrent&&<div style={{background:mod.palette.accent,color:"#fff",fontFamily:"'Fredoka One',cursive",fontSize:14,padding:"8px 18px",borderRadius:14,whiteSpace:"nowrap",boxShadow:`0 4px 0 ${mod.palette.shadow.replace("0.2","0.5")}, 0 4px 12px ${mod.palette.shadow}`}}>Start →</div>}
             {isDone&&<div style={{color:"#22c55e",fontSize:24}}>✓</div>}
           </div>
         );
