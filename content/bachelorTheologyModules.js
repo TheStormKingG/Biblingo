@@ -1,7 +1,9 @@
 /**
- * Bachelor of Theology course structure (typical 3-year curriculum).
- * Align module titles, credits, and lesson lists with Bachelor-of-Theology-Course-Content-2021-22.pdf.
+ * Bachelor of Theology (B.Th) — built from syllabus.
+ * Each module has 12 lessons; each lesson has 12 slides (see bthTeachContent).
  */
+
+import { SEMESTERS, lessonId } from "./bthSyllabus.js";
 
 const BTH_PALETTE = (accent, text, card, bg, badge, badgeText, shadow) => ({
   accent,
@@ -10,216 +12,66 @@ const BTH_PALETTE = (accent, text, card, bg, badge, badgeText, shadow) => ({
   bg,
   badge,
   badgeText,
-  shadow: shadow || `${accent.replace(')', ', 0.2)').replace('rgb', 'rgba')}`,
+  shadow: shadow || `rgba(0,0,0,0.15)`,
 });
+
+const PALETTES = [
+  BTH_PALETTE("#0d9488", "#0f766e", "#ccfbf1", "#f0fdfa", "#99f6e4", "#0d9488", "rgba(13,148,136,0.2)"),
+  BTH_PALETTE("#2563eb", "#1d4ed8", "#dbeafe", "#eff6ff", "#93c5fd", "#2563eb", "rgba(37,99,235,0.2)"),
+  BTH_PALETTE("#7c3aed", "#6d28d9", "#ede9fe", "#f5f3ff", "#c4b5fd", "#7c3aed", "rgba(124,58,237,0.2)"),
+  BTH_PALETTE("#ca8a04", "#a16207", "#fef9c3", "#fefce8", "#fde047", "#ca8a04", "rgba(202,138,4,0.2)"),
+  BTH_PALETTE("#059669", "#047857", "#d1fae5", "#ecfdf5", "#6ee7b7", "#059669", "rgba(5,150,105,0.2)"),
+  BTH_PALETTE("#b45309", "#92400e", "#ffedd5", "#fff7ed", "#fdba74", "#b45309", "rgba(180,83,9,0.2)"),
+  BTH_PALETTE("#15803d", "#166534", "#dcfce7", "#f0fdf4", "#86efac", "#15803d", "rgba(21,128,61,0.2)"),
+  BTH_PALETTE("#c2410c", "#9a3412", "#ffedd5", "#fff7ed", "#fed7aa", "#c2410c", "rgba(194,65,12,0.2)"),
+];
+
+const EMOJIS = ["📜", "✝️", "📖", "🔍", "⛪", "🌍", "📐", "⚖️"];
+
+function buildLessons(semester, moduleIndex) {
+  const lessons = [];
+  for (let l = 0; l < 12; l++) {
+    const id = lessonId(semester.number, moduleIndex, l);
+    const isLast = l === 11;
+    lessons.push({
+      id,
+      type: isLast ? "quiz" : "reading",
+      title: isLast ? "Check Your Understanding" : `Lesson ${l + 1}`,
+      duration: isLast ? "5 min" : "6 min",
+      xp: isLast ? 40 : 20,
+    });
+  }
+  return lessons;
+}
+
+let globalModuleNumber = 0;
+
+export const BTH_MODULES = SEMESTERS.flatMap((sem) =>
+  sem.modules.map((title, mIdx) => {
+    globalModuleNumber += 1;
+    const palette = PALETTES[(globalModuleNumber - 1) % PALETTES.length];
+    const emoji = EMOJIS[(globalModuleNumber - 1) % EMOJIS.length];
+    return {
+      id: `bth-s${sem.number}-m${mIdx + 1}`,
+      semester: sem.number,
+      year: sem.year,
+      number: globalModuleNumber,
+      title,
+      subtitle: `Year ${sem.year} · Semester ${sem.number}`,
+      palette,
+      tag: "B.TH",
+      emoji,
+      xpTotal: 11 * 20 + 40,
+      summary: `${title}. Twelve lessons per module.`,
+      lessons: buildLessons(sem, mIdx),
+    };
+  })
+);
 
 export const BTH_YEARS = [1, 2, 3];
 
-export const BTH_MODULES = [
-  // ─── YEAR 1 ─────────────────────────────────────────────────────────────────
-  {
-    id: 'bth-y1-ot',
-    year: 1,
-    number: 1,
-    title: 'Introduction to Old Testament',
-    subtitle: 'Content, canon, and context',
-    credits: 12,
-    palette: BTH_PALETTE('#0d9488', '#0f766e', '#ccfbf1', '#f0fdfa', '#99f6e4', '#0d9488', 'rgba(13,148,136,0.2)'),
-    tag: 'BIBLICAL STUDIES',
-    emoji: '📜',
-    xpTotal: 90,
-    summary: 'Survey of the Old Testament: structure, themes, and historical setting. Foundation for further biblical study.',
-    lessons: [
-      { id: 'bth-y1-ot-1', type: 'reading', title: 'What Is the Old Testament?', duration: '6 min', xp: 25 },
-      { id: 'bth-y1-ot-2', type: 'reading', title: 'The Canon and the Books', duration: '6 min', xp: 25 },
-      { id: 'bth-y1-ot-3', type: 'quiz', title: 'Check Your Understanding', duration: '4 min', xp: 40 },
-    ],
-  },
-  {
-    id: 'bth-y1-nt',
-    year: 1,
-    number: 2,
-    title: 'Introduction to New Testament',
-    subtitle: 'From Gospels to Revelation',
-    credits: 12,
-    palette: BTH_PALETTE('#2563eb', '#1d4ed8', '#dbeafe', '#eff6ff', '#93c5fd', '#2563eb', 'rgba(37,99,235,0.2)'),
-    tag: 'BIBLICAL STUDIES',
-    emoji: '✝️',
-    xpTotal: 90,
-    summary: 'Survey of the New Testament: genres, key themes, and the world of the early church.',
-    lessons: [
-      { id: 'bth-y1-nt-1', type: 'reading', title: 'The New Testament in Context', duration: '6 min', xp: 25 },
-      { id: 'bth-y1-nt-2', type: 'reading', title: 'Gospels and Letters', duration: '6 min', xp: 25 },
-      { id: 'bth-y1-nt-3', type: 'quiz', title: 'Check Your Understanding', duration: '4 min', xp: 40 },
-    ],
-  },
-  {
-    id: 'bth-y1-doctrine',
-    year: 1,
-    number: 3,
-    title: 'Introduction to Christian Doctrine',
-    subtitle: 'Core beliefs of the faith',
-    credits: 12,
-    palette: BTH_PALETTE('#7c3aed', '#6d28d9', '#ede9fe', '#f5f3ff', '#c4b5fd', '#7c3aed', 'rgba(124,58,237,0.2)'),
-    tag: 'CHRISTIAN THOUGHT',
-    emoji: '📖',
-    xpTotal: 85,
-    summary: 'Foundational doctrines: God, Scripture, Christ, salvation, and the church.',
-    lessons: [
-      { id: 'bth-y1-doctrine-1', type: 'reading', title: 'The Doctrine of God', duration: '6 min', xp: 25 },
-      { id: 'bth-y1-doctrine-2', type: 'reading', title: 'Scripture and Revelation', duration: '5 min', xp: 20 },
-      { id: 'bth-y1-doctrine-3', type: 'quiz', title: 'Check Your Understanding', duration: '4 min', xp: 40 },
-    ],
-  },
-  {
-    id: 'bth-y1-hermeneutics',
-    year: 1,
-    number: 4,
-    title: 'Hermeneutics',
-    subtitle: 'Interpreting the Bible',
-    credits: 12,
-    palette: BTH_PALETTE('#ca8a04', '#a16207', '#fef9c3', '#fefce8', '#fde047', '#ca8a04', 'rgba(202,138,4,0.2)'),
-    tag: 'METHOD',
-    emoji: '🔍',
-    xpTotal: 85,
-    summary: 'Principles of biblical interpretation: context, genre, and application.',
-    lessons: [
-      { id: 'bth-y1-herm-1', type: 'reading', title: 'Why Hermeneutics Matters', duration: '5 min', xp: 20 },
-      { id: 'bth-y1-herm-2', type: 'reading', title: 'Context and Genre', duration: '6 min', xp: 25 },
-      { id: 'bth-y1-herm-3', type: 'quiz', title: 'Check Your Understanding', duration: '4 min', xp: 40 },
-    ],
-  },
-  // ─── YEAR 2 ─────────────────────────────────────────────────────────────────
-  {
-    id: 'bth-y2-ot-books',
-    year: 2,
-    number: 5,
-    title: 'Old Testament Set Books',
-    subtitle: 'Pentateuch and Prophets',
-    credits: 18,
-    palette: BTH_PALETTE('#059669', '#047857', '#d1fae5', '#ecfdf5', '#6ee7b7', '#059669', 'rgba(5,150,105,0.2)'),
-    tag: 'BIBLICAL STUDIES',
-    emoji: '📜',
-    xpTotal: 120,
-    summary: 'Close study of selected OT books: Torah and prophetic literature.',
-    lessons: [
-      { id: 'bth-y2-ot-1', type: 'reading', title: 'The Pentateuch: Overview', duration: '7 min', xp: 30 },
-      { id: 'bth-y2-ot-2', type: 'verse_study', title: 'Key Passages in the Prophets', duration: '6 min', xp: 30 },
-      { id: 'bth-y2-ot-3', type: 'quiz', title: 'OT Set Books Quiz', duration: '5 min', xp: 60 },
-    ],
-  },
-  {
-    id: 'bth-y2-nt-books',
-    year: 2,
-    number: 6,
-    title: 'New Testament Set Books',
-    subtitle: 'Gospels and Acts',
-    credits: 18,
-    palette: BTH_PALETTE('#1d4ed8', '#1e40af', '#dbeafe', '#eff6ff', '#93c5fd', '#1d4ed8', 'rgba(29,78,216,0.2)'),
-    tag: 'BIBLICAL STUDIES',
-    emoji: '✝️',
-    xpTotal: 120,
-    summary: 'Close study of the Gospels and Acts: narrative and theology.',
-    lessons: [
-      { id: 'bth-y2-nt-1', type: 'reading', title: 'The Synoptic Gospels', duration: '7 min', xp: 30 },
-      { id: 'bth-y2-nt-2', type: 'reading', title: 'Acts and the Early Church', duration: '6 min', xp: 30 },
-      { id: 'bth-y2-nt-3', type: 'quiz', title: 'NT Set Books Quiz', duration: '5 min', xp: 60 },
-    ],
-  },
-  {
-    id: 'bth-y2-church-history',
-    year: 2,
-    number: 7,
-    title: 'Church History',
-    subtitle: 'From the apostles to the Reformers',
-    credits: 12,
-    palette: BTH_PALETTE('#b45309', '#92400e', '#ffedd5', '#fff7ed', '#fdba74', '#b45309', 'rgba(180,83,9,0.2)'),
-    tag: 'CHRISTIAN THOUGHT',
-    emoji: '⛪',
-    xpTotal: 90,
-    summary: 'Major movements, councils, and figures in church history.',
-    lessons: [
-      { id: 'bth-y2-ch-1', type: 'reading', title: 'The Early Church', duration: '6 min', xp: 25 },
-      { id: 'bth-y2-ch-2', type: 'reading', title: 'Reformation and Beyond', duration: '6 min', xp: 25 },
-      { id: 'bth-y2-ch-3', type: 'quiz', title: 'Church History Quiz', duration: '4 min', xp: 40 },
-    ],
-  },
-  {
-    id: 'bth-y2-theology',
-    year: 2,
-    number: 8,
-    title: 'Systematic Theology 1',
-    subtitle: 'God, humanity, and sin',
-    credits: 12,
-    palette: BTH_PALETTE('#7e22ce', '#6b21a8', '#f3e8ff', '#faf5ff', '#d8b4fe', '#7e22ce', 'rgba(126,34,206,0.2)'),
-    tag: 'CHRISTIAN THOUGHT',
-    emoji: '📐',
-    xpTotal: 90,
-    summary: 'Systematic treatment of the doctrines of God, creation, and the fall.',
-    lessons: [
-      { id: 'bth-y2-th-1', type: 'reading', title: 'The Doctrine of God', duration: '6 min', xp: 25 },
-      { id: 'bth-y2-th-2', type: 'reading', title: 'Humanity and Sin', duration: '6 min', xp: 25 },
-      { id: 'bth-y2-th-3', type: 'quiz', title: 'Systematic Theology Quiz', duration: '4 min', xp: 40 },
-    ],
-  },
-  // ─── YEAR 3 ─────────────────────────────────────────────────────────────────
-  {
-    id: 'bth-y3-advanced',
-    year: 3,
-    number: 9,
-    title: 'Advanced Biblical Studies',
-    subtitle: 'Elective or set books',
-    credits: 18,
-    palette: BTH_PALETTE('#0f766e', '#115e59', '#ccfbf1', '#f0fdfa', '#5eead4', '#0f766e', 'rgba(15,118,110,0.2)'),
-    tag: 'BIBLICAL STUDIES',
-    emoji: '📚',
-    xpTotal: 110,
-    summary: 'Specialised study in OT or NT texts and themes.',
-    lessons: [
-      { id: 'bth-y3-adv-1', type: 'reading', title: 'Advanced Themes', duration: '7 min', xp: 35 },
-      { id: 'bth-y3-adv-2', type: 'reflection', title: 'Reflect & Apply', duration: '5 min', xp: 25 },
-      { id: 'bth-y3-adv-3', type: 'quiz', title: 'Advanced Studies Quiz', duration: '5 min', xp: 50 },
-    ],
-  },
-  {
-    id: 'bth-y3-ethics',
-    year: 3,
-    number: 10,
-    title: 'Christian Ethics',
-    subtitle: 'Living out the faith',
-    credits: 12,
-    palette: BTH_PALETTE('#15803d', '#166534', '#dcfce7', '#f0fdf4', '#86efac', '#15803d', 'rgba(21,128,61,0.2)'),
-    tag: 'PRACTICAL',
-    emoji: '⚖️',
-    xpTotal: 90,
-    summary: 'Biblical and theological foundations for ethical decision-making.',
-    lessons: [
-      { id: 'bth-y3-eth-1', type: 'reading', title: 'Foundations of Christian Ethics', duration: '6 min', xp: 25 },
-      { id: 'bth-y3-eth-2', type: 'reading', title: 'Ethics in Practice', duration: '6 min', xp: 25 },
-      { id: 'bth-y3-eth-3', type: 'quiz', title: 'Ethics Quiz', duration: '4 min', xp: 40 },
-    ],
-  },
-  {
-    id: 'bth-y3-mission',
-    year: 3,
-    number: 11,
-    title: 'Mission & Ministry',
-    subtitle: 'Church and world',
-    credits: 12,
-    palette: BTH_PALETTE('#c2410c', '#9a3412', '#ffedd5', '#fff7ed', '#fed7aa', '#c2410c', 'rgba(194,65,12,0.2)'),
-    tag: 'PRACTICAL',
-    emoji: '🌍',
-    xpTotal: 85,
-    summary: 'Biblical mission, evangelism, and ministry in context.',
-    lessons: [
-      { id: 'bth-y3-mis-1', type: 'reading', title: 'Biblical Foundations of Mission', duration: '6 min', xp: 25 },
-      { id: 'bth-y3-mis-2', type: 'reflection', title: 'Reflect: Your Context', duration: '5 min', xp: 20 },
-      { id: 'bth-y3-mis-3', type: 'quiz', title: 'Mission Quiz', duration: '4 min', xp: 40 },
-    ],
-  },
-];
+export { SEMESTERS } from "./bthSyllabus.js";
 
-/** All BTh lesson IDs for validation and progress. */
 export function getBthLessonIds() {
   return BTH_MODULES.flatMap((m) => m.lessons.map((l) => l.id));
 }

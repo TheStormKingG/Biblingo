@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { BTH_MODULES } from "./content/bachelorTheologyModules.js";
+import { BTH_MODULES, SEMESTERS } from "./content/bachelorTheologyModules.js";
 import { getBthTeachContent } from "./content/bthTeachContent.js";
 import { getBthQuestions } from "./content/bthQuestions.js";
 import { getBthScenes } from "./content/bthScenes.jsx";
@@ -1179,13 +1179,19 @@ function HomeScreen({modules,xp,streak,progress,completed,isModUnlocked,onSelect
         <div style={{position:"absolute",right:-24,top:-24,fontSize:110,opacity:0.1,transform:"rotate(12deg)"}}>✝</div>
         <div style={{fontSize:11,fontWeight:900,color:"rgba(255,255,255,0.7)",letterSpacing:"0.18em",marginBottom:4}}>ACTIVE COURSE</div>
         <div style={{fontFamily:"'Fredoka One',cursive",fontSize:24,color:"#fff",marginBottom:2}}>Bachelor of Theology</div>
-        <div style={{fontSize:14,color:"rgba(255,255,255,0.8)",marginBottom:14}}>3 years · 11 modules · 33 lessons · {progress}% complete</div>
+        <div style={{fontSize:14,color:"rgba(255,255,255,0.8)",marginBottom:14}}>6 semesters · {modules.length} modules · {totalLessons} lessons · {progress}% complete</div>
         <div style={{background:"rgba(255,255,255,0.25)",borderRadius:10,height:12,overflow:"hidden"}}><div style={{height:"100%",width:`${progress}%`,background:"#fff",borderRadius:10,transition:"width 0.6s ease"}}/></div>
       </div>
-      <div style={{fontSize:12,fontWeight:900,color:"#a8845a",letterSpacing:"0.18em",marginBottom:16}}>MODULES (BY YEAR)</div>
-      {modules.map((mod,idx)=>{
-        const unlocked=isModUnlocked(idx);const done=mod.lessons.filter(l=>completed.has(l.id)).length;const pct=Math.round((done/mod.lessons.length)*100);const isComplete=done===mod.lessons.length;const Illus=ILLUSTRATIONS[mod.id]||ILLUSTRATIONS.m1;
+      <div style={{fontSize:12,fontWeight:900,color:"#a8845a",letterSpacing:"0.18em",marginBottom:16}}>MODULES BY SEMESTER</div>
+      {SEMESTERS.map((sem)=>{
+        const semModules=modules.filter(m=>m.semester===sem.number);
+        if(semModules.length===0)return null;
         return(
+          <div key={`sem-${sem.number}`} style={{marginBottom:28}}>
+            <div style={{fontSize:11,fontWeight:900,color:"#0d9488",letterSpacing:"0.15em",marginBottom:12,paddingBottom:6,borderBottom:"2px solid #0d9488"}}>YEAR {sem.year} · {sem.title.toUpperCase()}</div>
+            {semModules.map((mod)=>{
+              const idx=modules.findIndex(m=>m.id===mod.id);const unlocked=isModUnlocked(idx);const done=mod.lessons.filter(l=>completed.has(l.id)).length;const pct=Math.round((done/mod.lessons.length)*100);const isComplete=done===mod.lessons.length;const Illus=ILLUSTRATIONS[mod.id]||ILLUSTRATIONS.m1;
+              return(
           <div key={mod.id} className={unlocked?"card-hover":""} onClick={()=>unlocked&&onSelect(mod)} style={{marginBottom:22,borderRadius:24,overflow:"hidden",opacity:unlocked?1:0.5,boxShadow:unlocked?`0 6px 0 ${mod.palette.shadow.replace("0.2","0.5")},0 8px 28px ${mod.palette.shadow}`:"0 2px 8px rgba(0,0,0,0.08)",border:`2.5px solid ${unlocked?mod.palette.accent+"44":"#e5e0d8"}`,cursor:unlocked?"pointer":"not-allowed",animation:`pop ${0.3+idx*0.07}s cubic-bezier(.34,1.56,.64,1) both`,animationDelay:`${idx*0.06}s`}}>
             <div style={{height:180,position:"relative",background:mod.palette.bg}}>
               <Illus/>
@@ -1205,6 +1211,9 @@ function HomeScreen({modules,xp,streak,progress,completed,isModUnlocked,onSelect
               </div>
               {unlocked&&<div><div style={{display:"flex",justifyContent:"space-between",marginBottom:6}}><span style={{fontSize:13,fontWeight:800,color:mod.palette.accent}}>{done}/{mod.lessons.length} done</span><span style={{fontSize:13,fontWeight:800,color:mod.palette.accent}}>{pct}%</span></div><div style={{height:11,background:`${mod.palette.accent}22`,borderRadius:8,overflow:"hidden"}}><div style={{height:"100%",width:`${pct}%`,background:mod.palette.accent,borderRadius:8,transition:"width 0.6s ease"}}/></div><div style={{marginTop:12,fontFamily:"'Fredoka One',cursive",fontSize:15,color:mod.palette.accent}}>{isComplete?"Review Module →":done>0?"Continue →":"Start Learning →"}</div></div>}
             </div>
+          </div>
+        );
+            })}
           </div>
         );
       })}

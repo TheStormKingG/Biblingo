@@ -61,11 +61,20 @@ function normalize(q) {
   return { q: q.q || 'Question', opts: q.opts, c };
 }
 
+const GENERIC_QUIZ = [
+  { q: "What was the main theme of this lesson?", opts: ["Review the slides", "The key concepts covered", "Only the first slide", "None"], c: 1 },
+  { q: "How many slides did this lesson contain?", opts: ["6", "12", "8", "10"], c: 1 },
+  { q: "Why is reviewing the material important?", opts: ["It isn't", "It helps consolidate learning", "Only for exams", "Only for quizzes"], c: 1 },
+  { q: "What should you do after completing a module?", opts: ["Skip the next", "Proceed to the next lesson or module", "Repeat only the quiz", "Stop"], c: 1 },
+];
+
 export function getBthQuestions(lessonId) {
-  if (!lessonId || typeof lessonId !== 'string') return [];
+  if (!lessonId || typeof lessonId !== "string") return [];
   const list = BTH_QUESTIONS_RAW[lessonId];
-  if (!Array.isArray(list) || list.length === 0) return [];
-  return list.map(normalize).filter(Boolean);
+  if (Array.isArray(list) && list.length > 0) return list.map(normalize).filter(Boolean);
+  // New syllabus: lesson 12 is quiz (bth-s*-m*-l12)
+  if (/^bth-s\d+-m\d+-l12$/.test(lessonId)) return GENERIC_QUIZ.map(normalize).filter(Boolean);
+  return [];
 }
 
 export { BTH_QUESTIONS_RAW };

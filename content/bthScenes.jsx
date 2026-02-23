@@ -251,8 +251,31 @@ const BTH_SCENE_MAP = {
   "bth-y3-mis-3": [SceneReview],
 };
 
+const SCENE_POOL = [
+  SceneOTScroll,
+  SceneThreeDivisions,
+  SceneLampScripture,
+  SceneCanonBooks,
+  SceneScribes,
+  SceneNTContext,
+  SceneGospelsLetters,
+  SceneDoctrineGod,
+  SceneScriptureRevelation,
+  SceneHermeneutics,
+  SceneContextGenre,
+  SceneReview,
+];
+
+const SLIDES_PER_LESSON = 12;
+
 export function getBthScenes(lessonId) {
   const list = BTH_SCENE_MAP[lessonId];
   if (Array.isArray(list) && list.length > 0) return list;
+  // New syllabus: 12 slides per lesson — cycle through pool
+  if (lessonId && /^bth-s\d+-m\d+-l\d+$/.test(lessonId)) {
+    const out = [];
+    for (let i = 0; i < SLIDES_PER_LESSON; i++) out.push(SCENE_POOL[i % SCENE_POOL.length]);
+    return out;
+  }
   return [SceneDefault];
 }
