@@ -75,15 +75,21 @@ const FRIENDLY_TITLES = {
   "Leadership and Pastoral Administration": "Leading God's People",
 };
 
+/** Custom lesson titles (overrides default "Lesson 1", etc.). */
+const LESSON_TITLES = {
+  "bth-s1-m1-l1": "In the Beginning – Foundations of the Story",
+};
+
 function buildLessons(semester, moduleIndex) {
   const lessons = [];
   for (let l = 0; l < 12; l++) {
     const id = lessonId(semester.number, moduleIndex, l);
     const isLast = l === 11;
+    const defaultTitle = isLast ? "Check Your Understanding" : `Lesson ${l + 1}`;
     lessons.push({
       id,
       type: isLast ? "quiz" : "reading",
-      title: isLast ? "Check Your Understanding" : `Lesson ${l + 1}`,
+      title: LESSON_TITLES[id] || defaultTitle,
       duration: isLast ? "5 min" : "6 min",
       xp: isLast ? 40 : 20,
     });
