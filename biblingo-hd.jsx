@@ -1133,7 +1133,7 @@ export default function Biblingo({
         onSelectModule={(mod)=>{setActiveMod(mod);setScreen("module");}}
         onGoHome={()=>setScreen("home")}
       />
-      <div style={{flex:1,minWidth:0,display:"flex",flexDirection:"column"}}>
+      <div style={{flex:1,minWidth:0,marginLeft:260,display:"flex",flexDirection:"column"}}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap');
         *{box-sizing:border-box;margin:0;padding:0;}
@@ -1186,7 +1186,7 @@ function Sidebar({screen,activeMod,modules,SEMESTERS,isModUnlocked,onSelectModul
     else scrollToSemester(semNumber);
   };
   return(
-    <aside style={{width:260,flexShrink:0,background:"#fff",borderRight:"2px solid #e5e0d8",height:"100vh",overflowY:"auto",overflowX:"hidden",boxShadow:"2px 0 12px rgba(0,0,0,0.06)",display:"flex",flexDirection:"column"}}>
+    <aside style={{position:"fixed",left:0,top:0,width:260,height:"100vh",background:"#fff",borderRight:"2px solid #e5e0d8",overflow:"hidden",boxShadow:"2px 0 12px rgba(0,0,0,0.06)",display:"flex",flexDirection:"column",zIndex:10}}>
       <div style={{padding:"20px 16px 16px",borderBottom:"2px solid #f5f0e8",flexShrink:0}}>
         <button onClick={onGoHome} style={{background:"none",border:"none",cursor:"pointer",textAlign:"left",width:"100%",padding:0}}>
           <div style={{fontFamily:"'Fredoka One',cursive",fontSize:22,color:"#d97706",lineHeight:1.2}}>Biblingo</div>
