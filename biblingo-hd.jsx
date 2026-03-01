@@ -1123,7 +1123,17 @@ export default function Biblingo({
   const handleComplete=(lessonId,earnedXP)=>{setCompleted(prev=>new Set([...prev,lessonId]));setXp(prev=>prev+earnedXP);setScreen("module");};
 
   return (
-    <div style={{fontFamily:"'Nunito','Segoe UI',sans-serif",minHeight:"100vh",background:"#f7f3ee",color:"#1c0f00"}}>
+    <div style={{fontFamily:"'Nunito','Segoe UI',sans-serif",minHeight:"100vh",background:"#f7f3ee",color:"#1c0f00",display:"flex"}}>
+      <Sidebar
+        screen={screen}
+        activeMod={activeMod}
+        modules={modules}
+        SEMESTERS={SEMESTERS}
+        isModUnlocked={isModUnlocked}
+        onSelectModule={(mod)=>{setActiveMod(mod);setScreen("module");}}
+        onGoHome={()=>setScreen("home")}
+      />
+      <div style={{flex:1,minWidth:0,display:"flex",flexDirection:"column"}}>
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Fredoka+One&display=swap');
         *{box-sizing:border-box;margin:0;padding:0;}
@@ -1161,7 +1171,55 @@ export default function Biblingo({
       {screen==="home"&&<HomeScreen modules={modules} xp={xp} streak={streak} progress={courseProgress} completed={completed} isModUnlocked={isModUnlocked} onSelect={mod=>{setActiveMod(mod);setScreen("module");}}/>}
       {screen==="module"&&activeMod&&<ModuleScreen mod={activeMod} completed={completed} isLessonUnlocked={isLessonUnlocked} MODULES={modules} onBack={()=>setScreen("home")} onLesson={lesson=>{setActiveLesson(lesson);setScreen("lesson");}}/>}
       {screen==="lesson"&&activeLesson&&activeMod&&<LessonScreen lesson={activeLesson} mod={activeMod} onBack={()=>setScreen("module")} onComplete={(xp)=>handleComplete(activeLesson.id,xp)}/>}
+      </div>
     </div>
+  );
+}
+
+function Sidebar({screen,activeMod,modules,SEMESTERS,isModUnlocked,onSelectModule,onGoHome}){
+  const scrollToSemester=(semNumber)=>{
+    const el=document.getElementById(`sem-${semNumber}`);
+    if(el)el.scrollIntoView({behavior:"smooth",block:"start"});
+  };
+  const onSectionClick=(semNumber)=>{
+    if(screen!=="home"){ onGoHome(); setTimeout(()=>scrollToSemester(semNumber),350); }
+    else scrollToSemester(semNumber);
+  };
+  return(
+    <aside style={{width:260,flexShrink:0,background:"#fff",borderRight:"2px solid #e5e0d8",minHeight:"100vh",overflowY:"auto",boxShadow:"2px 0 12px rgba(0,0,0,0.06)"}}>
+      <div style={{padding:"20px 16px 16px",borderBottom:"2px solid #f5f0e8"}}>
+        <button onClick={onGoHome} style={{background:"none",border:"none",cursor:"pointer",textAlign:"left",width:"100%",padding:0}}>
+          <div style={{fontFamily:"'Fredoka One',cursive",fontSize:22,color:"#d97706",lineHeight:1.2}}>Biblingo</div>
+          <div style={{fontSize:11,color:"#a8845a",fontWeight:700,marginTop:2}}>Bachelor of Theology</div>
+        </button>
+      </div>
+      <nav style={{padding:"12px 0 24px"}}>
+        <div style={{fontSize:10,fontWeight:900,color:"#a8845a",letterSpacing:"0.2em",padding:"0 18px 10px"}}>SECTIONS</div>
+        {SEMESTERS.map((sem)=>{
+          const semModules=modules.filter(m=>m.semester===sem.number);
+          if(semModules.length===0)return null;
+          return(
+            <div key={`sem-${sem.number}`} style={{marginBottom:4}}>
+              <button onClick={()=>onSectionClick(sem.number)} style={{width:"100%",background:"none",border:"none",cursor:"pointer",textAlign:"left",padding:"10px 18px",fontSize:12,fontWeight:900,color:"#0d9488",letterSpacing:"0.08em",display:"flex",alignItems:"center",gap:6}}>
+                <span style={{opacity:0.7}}>▸</span> Year {sem.year} · {sem.title}
+              </button>
+              <div style={{paddingLeft:10}}>
+                {semModules.map((mod)=>{
+                  const idx=modules.findIndex(m=>m.id===mod.id);
+                  const unlocked=isModUnlocked(idx);
+                  const isActive=activeMod&&activeMod.id===mod.id;
+                  return(
+                    <button key={mod.id} onClick={()=>unlocked&&onSelectModule(mod)} disabled={!unlocked} style={{width:"100%",background:isActive?"#f0fdfa":"none",border:"none",borderLeft:isActive?"3px solid #0d9488":"3px solid transparent",cursor:unlocked?"pointer":"not-allowed",textAlign:"left",padding:"8px 14px 8px 12px",fontSize:13,fontWeight:700,color:unlocked?(isActive?"#0d9488":"#44403c"):"#a8a29e",opacity:unlocked?1:0.6,lineHeight:1.3}}>
+                      {mod.title}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </nav>
+    </aside>
   );
 }
 
@@ -1188,7 +1246,7 @@ function HomeScreen({modules,xp,streak,progress,completed,isModUnlocked,onSelect
         const semModules=modules.filter(m=>m.semester===sem.number);
         if(semModules.length===0)return null;
         return(
-          <div key={`sem-${sem.number}`} style={{marginBottom:28}}>
+          <div key={`sem-${sem.number}`} id={`sem-${sem.number}`} style={{marginBottom:28}}>
             <div style={{fontSize:11,fontWeight:900,color:"#0d9488",letterSpacing:"0.15em",marginBottom:12,paddingBottom:6,borderBottom:"2px solid #0d9488"}}>YEAR {sem.year} · {sem.title.toUpperCase()}</div>
             {semModules.map((mod)=>{
               const idx=modules.findIndex(m=>m.id===mod.id);const unlocked=isModUnlocked(idx);const done=mod.lessons.filter(l=>completed.has(l.id)).length;const pct=Math.round((done/mod.lessons.length)*100);const isComplete=done===mod.lessons.length;const Illus=ILLUSTRATIONS[mod.id]||ILLUSTRATIONS.m1;
