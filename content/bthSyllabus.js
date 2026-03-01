@@ -8,6 +8,7 @@ export const SEMESTERS = [
     number: 1,
     year: 1,
     title: "First Semester",
+    titleFriendly: "Part 1",
     modules: [
       "Survey of the Old Testament",
       "Orientation to Christian Theology",
@@ -21,6 +22,7 @@ export const SEMESTERS = [
     number: 2,
     year: 1,
     title: "Second Semester",
+    titleFriendly: "Part 2",
     modules: [
       "History of Israel",
       "Pentateuch",
@@ -38,6 +40,7 @@ export const SEMESTERS = [
     number: 3,
     year: 2,
     title: "Third Semester",
+    titleFriendly: "Part 3",
     modules: [
       "Biblical Archaeology",
       "Prophets",
@@ -55,6 +58,7 @@ export const SEMESTERS = [
     number: 4,
     year: 2,
     title: "Fourth Semester",
+    titleFriendly: "Part 4",
     modules: [
       "Biblical Archaeology",
       "Prophets",
@@ -72,6 +76,7 @@ export const SEMESTERS = [
     number: 5,
     year: 3,
     title: "Fifth Semester",
+    titleFriendly: "Part 5",
     modules: [
       "Apocalyptic Literature with Special Focus on the Book of Daniel",
       "Biblical Hebrew - Preliminary",
@@ -89,6 +94,7 @@ export const SEMESTERS = [
     number: 6,
     year: 3,
     title: "Sixth Semester",
+    titleFriendly: "Part 6",
     modules: [
       "Bible Hermeneutics: Methods and Perspectives",
       "The Book of the Revelation",

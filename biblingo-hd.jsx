@@ -1186,31 +1186,33 @@ function Sidebar({screen,activeMod,modules,SEMESTERS,isModUnlocked,onSelectModul
     else scrollToSemester(semNumber);
   };
   return(
-    <aside style={{width:260,flexShrink:0,background:"#fff",borderRight:"2px solid #e5e0d8",minHeight:"100vh",overflowY:"auto",boxShadow:"2px 0 12px rgba(0,0,0,0.06)"}}>
-      <div style={{padding:"20px 16px 16px",borderBottom:"2px solid #f5f0e8"}}>
+    <aside style={{width:260,flexShrink:0,background:"#fff",borderRight:"2px solid #e5e0d8",height:"100vh",overflowY:"auto",overflowX:"hidden",boxShadow:"2px 0 12px rgba(0,0,0,0.06)",display:"flex",flexDirection:"column"}}>
+      <div style={{padding:"20px 16px 16px",borderBottom:"2px solid #f5f0e8",flexShrink:0}}>
         <button onClick={onGoHome} style={{background:"none",border:"none",cursor:"pointer",textAlign:"left",width:"100%",padding:0}}>
           <div style={{fontFamily:"'Fredoka One',cursive",fontSize:22,color:"#d97706",lineHeight:1.2}}>Biblingo</div>
-          <div style={{fontSize:11,color:"#a8845a",fontWeight:700,marginTop:2}}>Bachelor of Theology</div>
+          <div style={{fontSize:11,color:"#a8845a",fontWeight:700,marginTop:2}}>Learning about God and the Bible</div>
         </button>
       </div>
-      <nav style={{padding:"12px 0 24px"}}>
-        <div style={{fontSize:10,fontWeight:900,color:"#a8845a",letterSpacing:"0.2em",padding:"0 18px 10px"}}>SECTIONS</div>
+      <nav style={{padding:"12px 0 24px",flex:1,minHeight:0,overflowY:"auto"}}>
+        <div style={{fontSize:10,fontWeight:900,color:"#a8845a",letterSpacing:"0.12em",padding:"0 18px 10px"}}>WHERE TO GO</div>
         {SEMESTERS.map((sem)=>{
           const semModules=modules.filter(m=>m.semester===sem.number);
           if(semModules.length===0)return null;
+          const partName=sem.titleFriendly||`Part ${sem.number}`;
           return(
             <div key={`sem-${sem.number}`} style={{marginBottom:4}}>
               <button onClick={()=>onSectionClick(sem.number)} style={{width:"100%",background:"none",border:"none",cursor:"pointer",textAlign:"left",padding:"10px 18px",fontSize:12,fontWeight:900,color:"#0d9488",letterSpacing:"0.08em",display:"flex",alignItems:"center",gap:6}}>
-                <span style={{opacity:0.7}}>▸</span> Year {sem.year} · {sem.title}
+                <span style={{opacity:0.7}}>▸</span> Year {sem.year} · {partName}
               </button>
               <div style={{paddingLeft:10}}>
                 {semModules.map((mod)=>{
                   const idx=modules.findIndex(m=>m.id===mod.id);
                   const unlocked=isModUnlocked(idx);
                   const isActive=activeMod&&activeMod.id===mod.id;
+                  const name=mod.friendlyTitle||mod.title;
                   return(
                     <button key={mod.id} onClick={()=>unlocked&&onSelectModule(mod)} disabled={!unlocked} style={{width:"100%",background:isActive?"#f0fdfa":"none",border:"none",borderLeft:isActive?"3px solid #0d9488":"3px solid transparent",cursor:unlocked?"pointer":"not-allowed",textAlign:"left",padding:"8px 14px 8px 12px",fontSize:13,fontWeight:700,color:unlocked?(isActive?"#0d9488":"#44403c"):"#a8a29e",opacity:unlocked?1:0.6,lineHeight:1.3}}>
-                      {mod.title}
+                      {name}
                     </button>
                   );
                 })}
@@ -1236,39 +1238,40 @@ function HomeScreen({modules,xp,streak,progress,completed,isModUnlocked,onSelect
       </div>
       <div className="pop" style={{marginTop:0,marginBottom:26,background:"linear-gradient(135deg,#0d9488,#059669)",borderRadius:24,padding:"22px 24px 20px",boxShadow:"0 8px 28px rgba(5,150,105,0.3),0 3px 0 rgba(4,120,87,0.5)",position:"relative",overflow:"hidden"}}>
         <div style={{position:"absolute",right:-24,top:-24,fontSize:110,opacity:0.1,transform:"rotate(12deg)"}}>✝</div>
-        <div style={{fontSize:11,fontWeight:900,color:"rgba(255,255,255,0.7)",letterSpacing:"0.18em",marginBottom:4}}>ACTIVE COURSE</div>
-        <div style={{fontFamily:"'Fredoka One',cursive",fontSize:24,color:"#fff",marginBottom:2}}>Bachelor of Theology</div>
-        <div style={{fontSize:14,color:"rgba(255,255,255,0.8)",marginBottom:14}}>6 semesters · {modules.length} modules · {totalLessons} lessons · {progress}% complete</div>
+        <div style={{fontSize:11,fontWeight:900,color:"rgba(255,255,255,0.7)",letterSpacing:"0.18em",marginBottom:4}}>WHAT YOU'RE LEARNING</div>
+        <div style={{fontFamily:"'Fredoka One',cursive",fontSize:24,color:"#fff",marginBottom:2}}>God and the Bible</div>
+        <div style={{fontSize:14,color:"rgba(255,255,255,0.8)",marginBottom:14}}>6 parts · {modules.length} topics · {totalLessons} lessons · {progress}% done</div>
         <div style={{background:"rgba(255,255,255,0.25)",borderRadius:10,height:12,overflow:"hidden"}}><div style={{height:"100%",width:`${progress}%`,background:"#fff",borderRadius:10,transition:"width 0.6s ease"}}/></div>
       </div>
-      <div style={{fontSize:12,fontWeight:900,color:"#a8845a",letterSpacing:"0.18em",marginBottom:16}}>MODULES BY SEMESTER</div>
+      <div style={{fontSize:12,fontWeight:900,color:"#a8845a",letterSpacing:"0.12em",marginBottom:16}}>ALL TOPICS</div>
       {SEMESTERS.map((sem)=>{
         const semModules=modules.filter(m=>m.semester===sem.number);
         if(semModules.length===0)return null;
+        const partName=sem.titleFriendly||`Part ${sem.number}`;
         return(
           <div key={`sem-${sem.number}`} id={`sem-${sem.number}`} style={{marginBottom:28}}>
-            <div style={{fontSize:11,fontWeight:900,color:"#0d9488",letterSpacing:"0.15em",marginBottom:12,paddingBottom:6,borderBottom:"2px solid #0d9488"}}>YEAR {sem.year} · {sem.title.toUpperCase()}</div>
+            <div style={{fontSize:11,fontWeight:900,color:"#0d9488",letterSpacing:"0.15em",marginBottom:12,paddingBottom:6,borderBottom:"2px solid #0d9488"}}>YEAR {sem.year} · {partName.toUpperCase()}</div>
             {semModules.map((mod)=>{
               const idx=modules.findIndex(m=>m.id===mod.id);const unlocked=isModUnlocked(idx);const done=mod.lessons.filter(l=>completed.has(l.id)).length;const pct=Math.round((done/mod.lessons.length)*100);const isComplete=done===mod.lessons.length;const Illus=ILLUSTRATIONS[mod.id]||ILLUSTRATIONS.m1;
               return(
           <div key={mod.id} className={unlocked?"card-hover":""} onClick={()=>unlocked&&onSelect(mod)} style={{marginBottom:22,borderRadius:24,overflow:"hidden",opacity:unlocked?1:0.5,boxShadow:unlocked?`0 6px 0 ${mod.palette.shadow.replace("0.2","0.5")},0 8px 28px ${mod.palette.shadow}`:"0 2px 8px rgba(0,0,0,0.08)",border:`2.5px solid ${unlocked?mod.palette.accent+"44":"#e5e0d8"}`,cursor:unlocked?"pointer":"not-allowed",animation:`pop ${0.3+idx*0.07}s cubic-bezier(.34,1.56,.64,1) both`,animationDelay:`${idx*0.06}s`}}>
             <div style={{height:180,position:"relative",background:mod.palette.bg}}>
               <Illus/>
-              <div style={{position:"absolute",top:12,left:14,background:mod.palette.accent,color:"#fff",fontFamily:"'Fredoka One',cursive",fontSize:13,padding:"4px 12px",borderRadius:20,boxShadow:"0 2px 8px rgba(0,0,0,0.25)"}}>{mod.emoji} {mod.year ? `Year ${mod.year} · ` : ""}Module {mod.number}</div>
+              <div style={{position:"absolute",top:12,left:14,background:mod.palette.accent,color:"#fff",fontFamily:"'Fredoka One',cursive",fontSize:13,padding:"4px 12px",borderRadius:20,boxShadow:"0 2px 8px rgba(0,0,0,0.25)"}}>{mod.emoji} {mod.year ? `Year ${mod.year} · ` : ""}Topic {mod.number}</div>
               <div style={{position:"absolute",top:12,right:14,background:"rgba(255,255,255,0.93)",color:mod.palette.accent,fontSize:11,fontWeight:900,letterSpacing:"0.12em",padding:"4px 11px",borderRadius:20,border:`2px solid ${mod.palette.accent}55`}}>{mod.tag}</div>
-              {!unlocked&&<div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.5)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:8}}><div style={{fontSize:44}}>🔒</div><div style={{color:"#fff",fontFamily:"'Fredoka One',cursive",fontSize:16,textAlign:"center",padding:"0 20px"}}>Complete Module {mod.number-1} first</div></div>}
-              {isComplete&&unlocked&&<div style={{position:"absolute",bottom:0,left:0,right:0,background:"rgba(34,197,94,0.92)",padding:"7px 16px",display:"flex",alignItems:"center",gap:8}}><span style={{fontSize:18}}>✅</span><span style={{color:"#fff",fontFamily:"'Fredoka One',cursive",fontSize:15}}>Module Complete!</span></div>}
+              {!unlocked&&<div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.5)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:8}}><div style={{fontSize:44}}>🔒</div><div style={{color:"#fff",fontFamily:"'Fredoka One',cursive",fontSize:16,textAlign:"center",padding:"0 20px"}}>Finish the topic before this one first</div></div>}
+              {isComplete&&unlocked&&<div style={{position:"absolute",bottom:0,left:0,right:0,background:"rgba(34,197,94,0.92)",padding:"7px 16px",display:"flex",alignItems:"center",gap:8}}><span style={{fontSize:18}}>✅</span><span style={{color:"#fff",fontFamily:"'Fredoka One',cursive",fontSize:15}}>All done!</span></div>}
             </div>
             <div style={{background:mod.palette.card,padding:"16px 20px 20px"}}>
-              <div style={{fontFamily:"'Fredoka One',cursive",fontSize:22,color:mod.palette.text,marginBottom:2}}>{mod.title}</div>
-              <div style={{fontSize:14,color:mod.palette.accent,fontWeight:700,marginBottom:8,fontStyle:"italic"}}>{mod.subtitle}</div>
-              <div style={{fontSize:14,color:"#78716c",lineHeight:1.55,marginBottom:14}}>{mod.summary}</div>
+              <div style={{fontFamily:"'Fredoka One',cursive",fontSize:22,color:mod.palette.text,marginBottom:2}}>{mod.friendlyTitle||mod.title}</div>
+              <div style={{fontSize:14,color:mod.palette.accent,fontWeight:700,marginBottom:8,fontStyle:"italic"}}>{mod.friendlySubtitle||mod.subtitle}</div>
+              <div style={{fontSize:14,color:"#78716c",lineHeight:1.55,marginBottom:14}}>{mod.friendlySummary||mod.summary}</div>
               <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:unlocked?14:0}}>
                 <span style={{background:mod.palette.badge,color:mod.palette.badgeText,fontSize:12,fontWeight:800,padding:"4px 11px",borderRadius:12}}>📚 {mod.lessons.length} lessons</span>
                 <span style={{background:mod.palette.badge,color:mod.palette.badgeText,fontSize:12,fontWeight:800,padding:"4px 11px",borderRadius:12}}>⭐ {mod.xpTotal} XP</span>
                 {mod.isPractice&&<span style={{background:"#f3e8ff",color:"#7c3aed",fontSize:12,fontWeight:800,padding:"4px 11px",borderRadius:12}}>⚡ Unlocks after all modules</span>}
               </div>
-              {unlocked&&<div><div style={{display:"flex",justifyContent:"space-between",marginBottom:6}}><span style={{fontSize:13,fontWeight:800,color:mod.palette.accent}}>{done}/{mod.lessons.length} done</span><span style={{fontSize:13,fontWeight:800,color:mod.palette.accent}}>{pct}%</span></div><div style={{height:11,background:`${mod.palette.accent}22`,borderRadius:8,overflow:"hidden"}}><div style={{height:"100%",width:`${pct}%`,background:mod.palette.accent,borderRadius:8,transition:"width 0.6s ease"}}/></div><div style={{marginTop:12,fontFamily:"'Fredoka One',cursive",fontSize:15,color:mod.palette.accent}}>{isComplete?"Review Module →":done>0?"Continue →":"Start Learning →"}</div></div>}
+              {unlocked&&<div><div style={{display:"flex",justifyContent:"space-between",marginBottom:6}}><span style={{fontSize:13,fontWeight:800,color:mod.palette.accent}}>{done}/{mod.lessons.length} done</span><span style={{fontSize:13,fontWeight:800,color:mod.palette.accent}}>{pct}%</span></div><div style={{height:11,background:`${mod.palette.accent}22`,borderRadius:8,overflow:"hidden"}}><div style={{height:"100%",width:`${pct}%`,background:mod.palette.accent,borderRadius:8,transition:"width 0.6s ease"}}/></div><div style={{marginTop:12,fontFamily:"'Fredoka One',cursive",fontSize:15,color:mod.palette.accent}}>{isComplete?"Do it again →":done>0?"Keep going →":"Start →"}</div></div>}
             </div>
           </div>
         );
@@ -1284,18 +1287,18 @@ function ModuleScreen({mod,completed,isLessonUnlocked,MODULES,onBack,onLesson}){
   const modIdx=MODULES.findIndex(m=>m.id===mod.id);const done=mod.lessons.filter(l=>completed.has(l.id)).length;const pct=Math.round((done/mod.lessons.length)*100);const Illus=ILLUSTRATIONS[mod.id]||ILLUSTRATIONS.m1;
   return(
     <div style={{maxWidth:680,margin:"0 auto",padding:"0 16px 60px"}}>
-      <button onClick={onBack} style={{background:"none",border:"none",color:mod.palette.accent,cursor:"pointer",fontFamily:"'Fredoka One',cursive",fontSize:17,padding:"20px 0 0",display:"flex",alignItems:"center",gap:6}}>‹ All Modules</button>
+      <button onClick={onBack} style={{background:"none",border:"none",color:mod.palette.accent,cursor:"pointer",fontFamily:"'Fredoka One',cursive",fontSize:17,padding:"20px 0 0",display:"flex",alignItems:"center",gap:6}}>‹ Back to all topics</button>
       <div className="pop" style={{marginTop:16,marginBottom:24,borderRadius:24,overflow:"hidden",boxShadow:`0 6px 0 ${mod.palette.shadow.replace("0.2","0.4")},0 8px 28px ${mod.palette.shadow}`,border:`2.5px solid ${mod.palette.accent}44`}}>
-        <div style={{height:200,background:mod.palette.bg,position:"relative"}}><Illus/><div style={{position:"absolute",top:12,left:14,background:mod.palette.accent,color:"#fff",fontFamily:"'Fredoka One',cursive",fontSize:13,padding:"4px 12px",borderRadius:20}}>{mod.emoji} {mod.year ? `Year ${mod.year} · ` : ""}Module {mod.number} · {mod.tag}</div></div>
+        <div style={{height:200,background:mod.palette.bg,position:"relative"}}><Illus/><div style={{position:"absolute",top:12,left:14,background:mod.palette.accent,color:"#fff",fontFamily:"'Fredoka One',cursive",fontSize:13,padding:"4px 12px",borderRadius:20}}>{mod.emoji} {mod.year ? `Year ${mod.year} · ` : ""}Topic {mod.number} · {mod.tag}</div></div>
         <div style={{background:mod.palette.card,padding:"18px 22px 20px"}}>
-          <div style={{fontFamily:"'Fredoka One',cursive",fontSize:26,color:mod.palette.text,marginBottom:2}}>{mod.title}</div>
-          <div style={{fontSize:14,color:mod.palette.accent,fontWeight:700,marginBottom:10,fontStyle:"italic"}}>{mod.subtitle}</div>
-          <div style={{fontSize:14,color:"#78716c",lineHeight:1.55,marginBottom:16}}>{mod.summary}</div>
+          <div style={{fontFamily:"'Fredoka One',cursive",fontSize:26,color:mod.palette.text,marginBottom:2}}>{mod.friendlyTitle||mod.title}</div>
+          <div style={{fontSize:14,color:mod.palette.accent,fontWeight:700,marginBottom:10,fontStyle:"italic"}}>{mod.friendlySubtitle||mod.subtitle}</div>
+          <div style={{fontSize:14,color:"#78716c",lineHeight:1.55,marginBottom:16}}>{mod.friendlySummary||mod.summary}</div>
           <div style={{display:"flex",justifyContent:"space-between",marginBottom:6}}><span style={{fontSize:13,fontWeight:800,color:mod.palette.accent}}>{done}/{mod.lessons.length} lessons complete</span><span style={{fontSize:13,fontWeight:800,color:mod.palette.accent}}>{pct}%</span></div>
           <div style={{height:12,background:`${mod.palette.accent}22`,borderRadius:8,overflow:"hidden"}}><div style={{height:"100%",width:`${pct}%`,background:mod.palette.accent,borderRadius:8,transition:"width 0.5s"}}/></div>
         </div>
       </div>
-      <div style={{fontSize:12,fontWeight:900,color:"#a8845a",letterSpacing:"0.18em",marginBottom:14}}>LESSONS</div>
+      <div style={{fontSize:12,fontWeight:900,color:"#a8845a",letterSpacing:"0.12em",marginBottom:14}}>LESSONS IN THIS TOPIC</div>
       {mod.lessons.map((lesson,idx)=>{
         const unlocked=isLessonUnlocked(modIdx,idx);const isDone=completed.has(lesson.id);const isCurrent=unlocked&&!isDone;const meta=LESSON_META[lesson.type];
         return(
@@ -1347,7 +1350,7 @@ function LessonScreen({lesson,mod,onBack,onComplete}){
     <div style={{maxWidth:680,margin:"0 auto",padding:"0 16px 60px"}}>
       <div style={{display:"flex",alignItems:"center",gap:14,padding:"18px 0 20px",borderBottom:`2px solid ${mod.palette.accent}22`,marginBottom:20}}>
         <button onClick={onBack} style={{background:"none",border:"none",color:mod.palette.accent,cursor:"pointer",fontFamily:"'Fredoka One',cursive",fontSize:22,lineHeight:1}}>‹</button>
-        <div style={{flex:1}}><div style={{fontSize:11,fontWeight:900,color:mod.palette.accent,letterSpacing:"0.15em"}}>MODULE {mod.number} · {mod.title.toUpperCase()}</div><div style={{fontFamily:"'Fredoka One',cursive",fontSize:17,color:"#1c0f00"}}>{lesson.title}</div></div>
+        <div style={{flex:1}}><div style={{fontSize:11,fontWeight:900,color:mod.palette.accent,letterSpacing:"0.15em"}}>TOPIC {mod.number} · {(mod.friendlyTitle||mod.title).toUpperCase()}</div><div style={{fontFamily:"'Fredoka One',cursive",fontSize:17,color:"#1c0f00"}}>{lesson.title}</div></div>
         <div style={{background:mod.palette.badge,border:`2px solid ${mod.palette.accent}55`,borderRadius:20,padding:"5px 14px",display:"flex",alignItems:"center",gap:5}}><span>⭐</span><span style={{fontFamily:"'Fredoka One',cursive",fontSize:15,color:mod.palette.badgeText}}>+{lesson.xp}</span></div>
       </div>
 

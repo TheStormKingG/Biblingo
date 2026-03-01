@@ -28,6 +28,53 @@ const PALETTES = [
 
 const EMOJIS = ["📜", "✝️", "📖", "🔍", "⛪", "🌍", "📐", "⚖️"];
 
+/** Simple names for low-literacy / young readers (non-technical). */
+const FRIENDLY_TITLES = {
+  "Survey of the Old Testament": "Bible Stories from Long Ago",
+  "Orientation to Christian Theology": "Learning About God",
+  "Introduction to the Study of Religions": "Different Ways People Believe",
+  "Introduction to Mission and Church Planting": "Telling Others About Jesus",
+  "English Grammar": "How Words Work",
+  "Greek Preliminary": "First Greek Words",
+  "History of Israel": "God's People in the Old Days",
+  "Pentateuch": "The First Five Bible Books",
+  "Synoptic Gospels": "Stories About Jesus (Matthew, Mark, Luke)",
+  "Gospel of John": "John's Story About Jesus",
+  "Introduction to Christian Doctrines": "What We Believe",
+  "History of Christianity: Medieval": "Church Long Ago",
+  "Major Religious Traditions in India": "Beliefs in India",
+  "Pastoral Care and Counselling": "Helping People Feel Better",
+  "Discipleship and Christian Living": "Following Jesus Every Day",
+  "Theology of Mission & Evangelism": "Sharing the Good News",
+  "Biblical Archaeology": "Old Things We Find in the Ground",
+  "Prophets": "People Who Spoke for God",
+  "Poetical Books and Wisdom Literature": "Songs and Wise Sayings in the Bible",
+  "Book of the Acts of Apostles": "What Jesus' Friends Did Next",
+  "Pauline Epistles": "Letters from Paul",
+  "Major Issues in Christology": "Who Jesus Is",
+  "Introduction to Christian Ethics": "Choosing the Right Thing",
+  "History of Christianity: Modern": "Church in New Times",
+  "A Detailed Study of Religious Tradition: Hinduism": "Learning About Hinduism",
+  "Christian Education": "Teaching About Jesus",
+  "Apocalyptic Literature with Special Focus on the Book of Daniel": "Daniel's Big Dreams",
+  "Biblical Hebrew - Preliminary": "First Hebrew Words",
+  "General Epistles": "Other Letters in the Bible",
+  "Biblical Greek - Preliminary": "More Greek Words",
+  "Indian Christian Theology": "God and the Church in India",
+  "History of Christianity in India": "Church in India",
+  "Modern Religious and Secular Movements in India": "New Ideas in India",
+  "Christian Homiletics": "Telling the Bible Story to Others",
+  "Christian Communication": "Talking About Jesus",
+  "Modern Trends in Missions": "Going Out for Jesus Today",
+  "Bible Hermeneutics: Methods and Perspectives": "How to Read the Bible",
+  "The Book of the Revelation": "The Last Bible Book",
+  "Theology of the New Testament": "What the New Bible Part Teaches",
+  "Modern Trends in Theology": "New Ideas About God",
+  "History of Pentecost Movement": "When the Spirit Came",
+  "Christian Response to Religious Cults": "When Beliefs Go Wrong",
+  "Leadership and Pastoral Administration": "Leading God's People",
+};
+
 function buildLessons(semester, moduleIndex) {
   const lessons = [];
   for (let l = 0; l < 12; l++) {
@@ -51,18 +98,23 @@ export const BTH_MODULES = SEMESTERS.flatMap((sem) =>
     globalModuleNumber += 1;
     const palette = PALETTES[(globalModuleNumber - 1) % PALETTES.length];
     const emoji = EMOJIS[(globalModuleNumber - 1) % EMOJIS.length];
+    const friendlyTitle = FRIENDLY_TITLES[title] || title;
+    const partName = sem.titleFriendly || `Part ${sem.number}`;
     return {
       id: `bth-s${sem.number}-m${mIdx + 1}`,
       semester: sem.number,
       year: sem.year,
       number: globalModuleNumber,
       title,
+      friendlyTitle,
       subtitle: `Year ${sem.year} · Semester ${sem.number}`,
+      friendlySubtitle: `Year ${sem.year} · ${partName}`,
       palette,
       tag: "B.TH",
       emoji,
       xpTotal: 11 * 20 + 40,
       summary: `${title}. Twelve lessons per module.`,
+      friendlySummary: `Stories and lessons. ${friendlyTitle}.`,
       lessons: buildLessons(sem, mIdx),
     };
   })
