@@ -1369,7 +1369,7 @@ function LessonScreen({lesson,mod,onBack,onComplete}){
           {/* Text below illustration */}
           <div style={{background:mod.palette.card,border:`2.5px solid ${mod.palette.accent}33`,borderRadius:20,padding:"20px 22px",marginBottom:16,boxShadow:`0 4px 16px ${mod.palette.shadow}`}}>
             <div style={{fontFamily:"'Fredoka One',cursive",fontSize:20,color:mod.palette.text,marginBottom:10}}>{tc.steps[step].title}</div>
-            <div style={{fontSize:15,lineHeight:1.75,color:"#44403c",marginBottom:tc.steps[step].highlight?14:0}}>{tc.steps[step].body}</div>
+            <div style={{fontSize:15,lineHeight:1.75,color:"#44403c",marginBottom:tc.steps[step].highlight?14:0,whiteSpace:"pre-line"}}>{tc.steps[step].body}</div>
             {tc.steps[step].highlight&&<div style={{background:`${mod.palette.accent}12`,borderLeft:`5px solid ${mod.palette.accent}`,borderRadius:"0 12px 12px 0",padding:"12px 16px",fontStyle:"italic",fontSize:14,color:mod.palette.text,lineHeight:1.7}}>{tc.steps[step].highlight}</div>}
           </div>
 

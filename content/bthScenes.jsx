@@ -212,10 +212,131 @@ export const SceneReview = () => (
   </svg>
 );
 
+// —— Module 1 Lesson 1: In the Beginning – 12 slides (teal/cream, minimal vector, educational)
+const VB_M1L1 = "0 0 560 260";
+export const SceneM1L1_01 = () => (
+  <svg viewBox={VB_M1L1} xmlns="http://www.w3.org/2000/svg" style={{ width: "100%", display: "block" }}>
+    <defs><linearGradient id="m1l1_bg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#f0fdfa"/><stop offset="100%" stopColor="#ccfbf1"/></linearGradient></defs>
+    <rect width="560" height="260" fill="url(#m1l1_bg1)"/>
+    {[70, 160, 250, 340, 430].map((x, i) => (<rect key={i} x={x} y={90} width="72" height="88" rx="6" fill="#fff" stroke="#0d9488" strokeWidth="2" fillOpacity="0.95"/>))}
+    <text x="280" y="220" textAnchor="middle" fontSize="16" fontWeight="bold" fill="#0f766e">39 books · Old Testament</text>
+  </svg>
+);
+export const SceneM1L1_02 = () => (
+  <svg viewBox={VB_M1L1} xmlns="http://www.w3.org/2000/svg" style={{ width: "100%", display: "block" }}>
+    <defs><linearGradient id="m1l1_bg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#134e4a"/><stop offset="100%" stopColor="#042f2e"/></linearGradient><radialGradient id="m1l1_light" cx="50%" cy="40%"><stop offset="0%" stopColor="#fef9c3" stopOpacity="0.7"/><stop offset="100%" stopColor="#fbbf24" stopOpacity="0"/></radialGradient></defs>
+    <rect width="560" height="260" fill="url(#m1l1_bg2)"/><rect width="560" height="260" fill="url(#m1l1_light)"/>
+    <ellipse cx="280" cy="100" rx="120" ry="50" fill="#fef3c7" opacity="0.9"/><text x="280" y="240" textAnchor="middle" fontSize="14" fill="#99f6e4">In the beginning God created</text>
+  </svg>
+);
+export const SceneM1L1_03 = () => (
+  <svg viewBox={VB_M1L1} xmlns="http://www.w3.org/2000/svg" style={{ width: "100%", display: "block" }}>
+    <defs><linearGradient id="m1l1_bg3" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#f0fdfa"/><stop offset="100%" stopColor="#ccfbf1"/></linearGradient></defs>
+    <rect width="560" height="260" fill="url(#m1l1_bg3)"/>
+    <circle cx="200" cy="140" r="36" fill="none" stroke="#0d9488" strokeWidth="3"/><circle cx="200" cy="136" r="8" fill="#fef9c3" opacity="0.9"/>
+    <circle cx="360" cy="140" r="36" fill="none" stroke="#0d9488" strokeWidth="3"/><circle cx="360" cy="136" r="8" fill="#fef9c3" opacity="0.9"/>
+    <text x="280" y="230" textAnchor="middle" fontSize="15" fontWeight="bold" fill="#0f766e">In God's image</text>
+  </svg>
+);
+export const SceneM1L1_04 = () => (
+  <svg viewBox={VB_M1L1} xmlns="http://www.w3.org/2000/svg" style={{ width: "100%", display: "block" }}>
+    <defs><linearGradient id="m1l1_bg4" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#fefce8"/><stop offset="100%" stopColor="#fef9c3"/></linearGradient></defs>
+    <rect width="560" height="260" fill="url(#m1l1_bg4)"/>
+    <path d="M280 200 L280 80 L320 120 L280 160 L240 120 Z" fill="#0d9488" stroke="#0f766e" strokeWidth="2" opacity="0.8"/>
+    <circle cx="280" cy="100" r="18" fill="#fef3c7" stroke="#ca8a04" strokeWidth="2"/><path d="M272 95 L288 105 L272 115" fill="none" stroke="#92400e" strokeWidth="2"/>
+    <line x1="260" y1="140" x2="300" y2="180" stroke="#78716c" strokeWidth="2" strokeDasharray="4 2"/>
+    <text x="280" y="235" textAnchor="middle" fontSize="15" fontWeight="bold" fill="#a16207">The Fall</text>
+  </svg>
+);
+export const SceneM1L1_05 = () => (
+  <svg viewBox={VB_M1L1} xmlns="http://www.w3.org/2000/svg" style={{ width: "100%", display: "block" }}>
+    <defs><linearGradient id="m1l1_bg5" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#f0fdf4"/><stop offset="100%" stopColor="#dcfce7"/></linearGradient></defs>
+    <rect width="560" height="260" fill="url(#m1l1_bg5)"/>
+    <path d="M120 180 L200 180 L240 140 L320 180 L440 180 L440 220 L120 220 Z" fill="#a8a29e" stroke="#78716c" strokeWidth="2"/>
+    <path d="M260 175 L280 155 L300 175 L280 195 Z" fill="#22c55e" stroke="#16a34a" strokeWidth="2"/>
+    <text x="280" y="248" textAnchor="middle" fontSize="15" fontWeight="bold" fill="#15803d">Consequences and hope</text>
+  </svg>
+);
+export const SceneM1L1_06 = () => (
+  <svg viewBox={VB_M1L1} xmlns="http://www.w3.org/2000/svg" style={{ width: "100%", display: "block" }}>
+    <defs><linearGradient id="m1l1_bg6" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#e0f2fe"/><stop offset="100%" stopColor="#bae6fd"/></linearGradient></defs>
+    <rect width="560" height="260" fill="url(#m1l1_bg6)"/>
+    <path d="M80 180 Q180 80 280 120 Q380 80 480 180" fill="none" stroke="#0ea5e9" strokeWidth="8" strokeLinecap="round"/>
+    <path d="M100 200 L160 200 L180 140 L220 200 L280 200 L300 140 L340 200 L460 200" fill="none" stroke="#0d9488" strokeWidth="4" strokeLinecap="round"/>
+    <ellipse cx="280" cy="200" rx="80" ry="24" fill="#0d9488" opacity="0.6"/>
+    <text x="280" y="245" textAnchor="middle" fontSize="15" fontWeight="bold" fill="#0369a1">Covenant with Noah</text>
+  </svg>
+);
+export const SceneM1L1_07 = () => (
+  <svg viewBox={VB_M1L1} xmlns="http://www.w3.org/2000/svg" style={{ width: "100%", display: "block" }}>
+    <defs><linearGradient id="m1l1_bg7" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#fef3c7"/><stop offset="100%" stopColor="#fde68a"/></linearGradient></defs>
+    <rect width="560" height="260" fill="url(#m1l1_bg7)"/>
+    <rect x="220" y="140" width="40" height="80" rx="4" fill="#a8a29e" stroke="#78716c" strokeWidth="2"/>
+    <rect x="200" y="120" width="80" height="100" rx="4" fill="#d6d3d1" stroke="#78716c" strokeWidth="2"/>
+    {[[240,100],[280,80],[320,100],[260,90],[300,95]].map(([x,y],i)=>(<ellipse key={i} cx={x} cy={y} rx="14" ry="8" fill="#fff" stroke="#94a3b8" strokeWidth="1" opacity="0.9"/>))}
+    <text x="280" y="235" textAnchor="middle" fontSize="15" fontWeight="bold" fill="#a16207">Tower of Babel</text>
+  </svg>
+);
+export const SceneM1L1_08 = () => (
+  <svg viewBox={VB_M1L1} xmlns="http://www.w3.org/2000/svg" style={{ width: "100%", display: "block" }}>
+    <defs><linearGradient id="m1l1_bg8" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b"/><stop offset="100%" stopColor="#0f172a"/></linearGradient></defs>
+    <rect width="560" height="260" fill="url(#m1l1_bg8)"/>
+    {[80,140,200,260,320,380,440,500].map((x,i)=>(<circle key={i} cx={x} cy={60+i*8} r="2.5" fill="#fef3c7" opacity="0.9"/>))}
+    <path d="M120 200 L200 160 L280 200 L360 140 L440 200" fill="none" stroke="#0d9488" strokeWidth="4" strokeLinecap="round"/>
+    <circle cx="120" cy="200" r="16" fill="#ccfbf1" stroke="#0d9488" strokeWidth="2"/>
+    <text x="280" y="245" textAnchor="middle" fontSize="14" fontWeight="bold" fill="#99f6e4">The call of Abram</text>
+  </svg>
+);
+export const SceneM1L1_09 = () => (
+  <svg viewBox={VB_M1L1} xmlns="http://www.w3.org/2000/svg" style={{ width: "100%", display: "block" }}>
+    <defs><linearGradient id="m1l1_bg9" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#1e293b"/><stop offset="100%" stopColor="#0f172a"/></linearGradient></defs>
+    <rect width="560" height="260" fill="url(#m1l1_bg9)"/>
+    {[100,180,260,340,420].map((x,i)=>(<circle key={i} cx={x} cy={80+i*6} r="3" fill="#fef3c7"/>))}
+    <path d="M280 220 L200 140 L280 100 L360 140 Z" fill="none" stroke="#0d9488" strokeWidth="3"/><circle cx="280" cy="100" r="12" fill="#0d9488"/>
+    <text x="280" y="248" textAnchor="middle" fontSize="14" fontWeight="bold" fill="#99f6e4">Covenant with Abraham</text>
+  </svg>
+);
+export const SceneM1L1_10 = () => (
+  <svg viewBox={VB_M1L1} xmlns="http://www.w3.org/2000/svg" style={{ width: "100%", display: "block" }}>
+    <defs><linearGradient id="m1l1_bg10" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#fefce8"/><stop offset="100%" stopColor="#fef9c3"/></linearGradient></defs>
+    <rect width="560" height="260" fill="url(#m1l1_bg10)"/>
+    <rect x="80" y="80" width="100" height="100" rx="8" fill="#fef3c7" stroke="#ca8a04" strokeWidth="2"/><text x="130" y="140" textAnchor="middle" fontSize="13" fontWeight="bold" fill="#92400e">Narrative</text>
+    <rect x="230" y="80" width="100" height="100" rx="8" fill="#dbeafe" stroke="#2563eb" strokeWidth="2"/><text x="280" y="140" textAnchor="middle" fontSize="13" fontWeight="bold" fill="#1d4ed8">Law</text>
+    <rect x="380" y="80" width="100" height="100" rx="8" fill="#f3e8ff" stroke="#7c3aed" strokeWidth="2"/><text x="430" y="140" textAnchor="middle" fontSize="13" fontWeight="bold" fill="#6d28d9">Poetry</text>
+    <rect x="455" y="95" width="70" height="70" rx="8" fill="#dcfce7" stroke="#16a34a" strokeWidth="2"/><text x="490" y="138" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#15803d">Prophecy</text>
+    <text x="280" y="230" textAnchor="middle" fontSize="15" fontWeight="bold" fill="#a16207">Understanding Scripture</text>
+  </svg>
+);
+export const SceneM1L1_11 = () => (
+  <svg viewBox={VB_M1L1} xmlns="http://www.w3.org/2000/svg" style={{ width: "100%", display: "block" }}>
+    <defs><linearGradient id="m1l1_bg11" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#f0fdfa"/><stop offset="100%" stopColor="#ccfbf1"/></linearGradient></defs>
+    <rect width="560" height="260" fill="url(#m1l1_bg11)"/>
+    <circle cx="80" cy="130" r="28" fill="#0d9488"/><text x="80" y="135" textAnchor="middle" fontSize="11" fill="#fff" fontWeight="bold">Creation</text>
+    <circle cx="160" cy="130" r="28" fill="#0d9488"/><text x="160" y="135" textAnchor="middle" fontSize="11" fill="#fff" fontWeight="bold">Fall</text>
+    <circle cx="240" cy="130" r="28" fill="#0d9488"/><text x="240" y="135" textAnchor="middle" fontSize="10" fill="#fff" fontWeight="bold">Promise</text>
+    <circle cx="320" cy="130" r="28" fill="#0d9488"/><text x="320" y="135" textAnchor="middle" fontSize="10" fill="#fff" fontWeight="bold">Covenant</text>
+    <circle cx="400" cy="130" r="28" fill="#0d9488"/><text x="400" y="135" textAnchor="middle" fontSize="10" fill="#fff" fontWeight="bold">Redemption</text>
+    <path d="M108 130 L132 130 M188 130 L212 130 M268 130 L292 130 M348 130 L372 130" stroke="#5eead4" strokeWidth="4"/>
+    <text x="280" y="220" textAnchor="middle" fontSize="15" fontWeight="bold" fill="#0f766e">One story</text>
+  </svg>
+);
+export const SceneM1L1_12 = () => (
+  <svg viewBox={VB_M1L1} xmlns="http://www.w3.org/2000/svg" style={{ width: "100%", display: "block" }}>
+    <defs><linearGradient id="m1l1_bg12" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#f0fdf4"/><stop offset="100%" stopColor="#dcfce7"/></linearGradient></defs>
+    <rect width="560" height="260" fill="url(#m1l1_bg12)"/>
+    <circle cx="280" cy="110" r="50" fill="#22c55e" opacity="0.2"/><text x="280" y="122" textAnchor="middle" fontSize="56" fill="#16a34a">✓</text>
+    <circle cx="180" cy="190" r="22" fill="#fff" stroke="#0d9488" strokeWidth="2"/><text x="180" y="195" textAnchor="middle" fontSize="14">?</text>
+    <circle cx="280" cy="190" r="22" fill="#fff" stroke="#0d9488" strokeWidth="2"/><text x="280" y="195" textAnchor="middle" fontSize="14">?</text>
+    <circle cx="380" cy="190" r="22" fill="#fff" stroke="#0d9488" strokeWidth="2"/><text x="380" y="195" textAnchor="middle" fontSize="14">?</text>
+    <text x="280" y="248" textAnchor="middle" fontSize="16" fontWeight="bold" fill="#15803d">Check your understanding</text>
+  </svg>
+);
+
 // Default scene when no mapping
 export const SceneDefault = SceneOTScroll;
 
 const BTH_SCENE_MAP = {
+  "bth-s1-m1-l1": [SceneM1L1_01, SceneM1L1_02, SceneM1L1_03, SceneM1L1_04, SceneM1L1_05, SceneM1L1_06, SceneM1L1_07, SceneM1L1_08, SceneM1L1_09, SceneM1L1_10, SceneM1L1_11, SceneM1L1_12],
   "bth-y1-ot-1": [SceneOTScroll, SceneThreeDivisions, SceneLampScripture],
   "bth-y1-ot-2": [SceneCanonBooks, SceneScribes],
   "bth-y1-ot-3": [SceneReview],
