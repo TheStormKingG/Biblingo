@@ -1363,7 +1363,11 @@ function LessonScreen({lesson,mod,onBack,onComplete}){
 
           {/* LARGE LANDSCAPE ILLUSTRATION */}
           <div className="fade" key={step} style={{borderRadius:20,overflow:"hidden",marginBottom:18,boxShadow:`0 6px 28px ${mod.palette.shadow}`,border:`2.5px solid ${mod.palette.accent}33`}}>
-            {scenes[Math.min(step,scenes.length-1)]&&(() => { const Scene=scenes[Math.min(step,scenes.length-1)]; return <Scene/>; })()}
+            {tc.steps[step].image ? (
+              <img src={tc.steps[step].image} alt={tc.steps[step].title} style={{width:"100%",display:"block",objectFit:"contain",background:"#f5f0e8"}} />
+            ) : scenes[Math.min(step,scenes.length-1)] ? (
+              (() => { const Scene=scenes[Math.min(step,scenes.length-1)]; return <Scene/>; })()
+            ) : null}
           </div>
 
           {/* Text below illustration */}
